@@ -34,6 +34,9 @@ static NSString *emptyString = @"";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.binaryLabel.adjustsFontSizeToFitWidth = YES;
+    self.decimalLabel.adjustsFontSizeToFitWidth = YES;
+    self.hexLabel.adjustsFontSizeToFitWidth = YES;
 	// Do any additional setup after loading the view.
     [FromHexConversion hexToBinary:@"B5F"];
     [FromHexConversion hexToDecimal:@"B5F"];
@@ -109,4 +112,9 @@ static NSString *emptyString = @"";
     }
 
 }
+
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 @end

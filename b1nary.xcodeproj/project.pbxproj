@@ -27,6 +27,7 @@
 		2715B2D91895D89700388251 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2715B2D81895D89700388251 /* HelpViewController.m */; };
 		2715B2DD189633F500388251 /* FromBinaryConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 2715B2DC189633F500388251 /* FromBinaryConversion.m */; };
 		2715B436189CDCA900388251 /* FromDecimalConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 2715B435189CDCA900388251 /* FromDecimalConversion.m */; };
+		277750EF18EA716B00869E8B /* iPhone5.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 277750EE18EA716B00869E8B /* iPhone5.storyboard */; };
 		27A81BF318A19CB100FD00ED /* FromHexConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A81BF218A19CB100FD00ED /* FromHexConversion.m */; };
 		27A81BF618A4D07B00FD00ED /* AdditionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A81BF518A4D07B00FD00ED /* AdditionViewController.m */; };
 		27A81BF918A4D09E00FD00ED /* ComplementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A81BF818A4D09E00FD00ED /* ComplementViewController.m */; };
@@ -76,6 +77,7 @@
 		2715B2DC189633F500388251 /* FromBinaryConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FromBinaryConversion.m; sourceTree = "<group>"; };
 		2715B434189CDCA900388251 /* FromDecimalConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FromDecimalConversion.h; sourceTree = "<group>"; };
 		2715B435189CDCA900388251 /* FromDecimalConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FromDecimalConversion.m; sourceTree = "<group>"; };
+		277750EE18EA716B00869E8B /* iPhone5.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone5.storyboard; sourceTree = "<group>"; };
 		27A81BF118A19CB100FD00ED /* FromHexConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FromHexConversion.h; sourceTree = "<group>"; };
 		27A81BF218A19CB100FD00ED /* FromHexConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FromHexConversion.m; sourceTree = "<group>"; };
 		27A81BF418A4D07B00FD00ED /* AdditionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdditionViewController.h; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				2715B2A81895D07000388251 /* AppDelegate.h */,
 				2715B2A91895D07000388251 /* AppDelegate.m */,
 				2715B2AB1895D07000388251 /* Main.storyboard */,
+				277750EE18EA716B00869E8B /* iPhone5.storyboard */,
 				2715B2AE1895D07000388251 /* BinaryViewController.h */,
 				2715B2AF1895D07000388251 /* BinaryViewController.m */,
 				2715B2B11895D07000388251 /* DecimalViewController.h */,
@@ -295,6 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2715B2B51895D07000388251 /* Images.xcassets in Resources */,
+				277750EF18EA716B00869E8B /* iPhone5.storyboard in Resources */,
 				2715B2A41895D07000388251 /* InfoPlist.strings in Resources */,
 				2715B2AD1895D07000388251 /* Main.storyboard in Resources */,
 			);
@@ -453,7 +457,7 @@
 		2715B2CC1895D07000388251 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -467,7 +471,7 @@
 		2715B2CD1895D07000388251 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

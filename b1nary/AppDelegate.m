@@ -10,12 +10,50 @@
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    CGSize iOSDeviceScreenSize = [[UIScreen mainScreen] bounds].size;
+    //UIViewController *initialViewController = nil;
+    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    if (iOSDeviceScreenSize.height == 480) {   // iPhone 3GS, 4, and 4S and iPod Touch 3rd and 4th generation: 3.5 inch screen (diagonally measured)
+        
+        // Instantiate a new storyboard object using the storyboard file named Storyboard_iPhone35
+        UIStoryboard *iPhone4 = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        
+        // Instantiate the initial view controller object from the storyboard
+        tabBarController = [iPhone4 instantiateInitialViewController];
+        // Instantiate a UIWindow object and initialize it with the screen size of the iOS device
+        //        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        self.window.rootViewController  = tabBarController;
+        //        [self.window makeKeyAndVisible];
+    }
+    
+    else  {//(iOSDeviceScreenSize.height == 568) {   // iPhone 5 and iPod Touch 5th generation: 4 inch screen (diagonally measured)
+        
+        // Instantiate a new storyboard object using the storyboard file named Storyboard_iPhone4
+        UIStoryboard *iPhone5 = [UIStoryboard storyboardWithName:@"iPhone5" bundle:nil];
+        
+        // Instantiate the initial view controller object from the storyboard
+        tabBarController = [iPhone5 instantiateInitialViewController];
+        //        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        self.window.rootViewController  = tabBarController;
+        //[self.window makeKeyAndVisible];
+    }
+    
+    // Instantiate a UIWindow object and initialize it with the screen size of the iOS device
+    //self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    // Set the initial view controller to be the root view controller of the window object
+    //self.window.rootViewController  = initialViewController;
+    
+    // Set the window object to be the key window and show it
+    //[self.window makeKeyAndVisible];
+    
     UIImage *tabBarBackground = [UIImage imageNamed:@"tabBar.png"];
     [[UITabBar appearance] setBackgroundImage:tabBarBackground];
     
-    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    //self.window.rootViewController = tabBarController;
+//    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
     UITabBar *tabBar = tabBarController.tabBar;
     
     //[[UITabBar appearance] setShadowImage:[UIImage imageNamed:@"transparentSquare.png"]];
@@ -51,6 +89,11 @@
     tabBarHelp.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
     tabBarHelp.image = [[UIImage imageNamed:@"helpTab.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     tabBarHelp.selectedImage = [[UIImage imageNamed:@"helpTabSelected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    
+    
+    
+
+    
     
     return YES;
 }

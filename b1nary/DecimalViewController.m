@@ -24,6 +24,9 @@ static NSString *emptyString = @"";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.binaryLabel.adjustsFontSizeToFitWidth = YES;
+    self.decimalLabel.adjustsFontSizeToFitWidth = YES;
+    self.hexLabel.adjustsFontSizeToFitWidth = YES;
 	// Do any additional setup after loading the view, typically from a nib.
     [FromDecimalConversion decimalToBinary:@"164"];
 }
@@ -97,4 +100,9 @@ static NSString *emptyString = @"";
     }
 
 }
+
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 @end
