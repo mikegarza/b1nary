@@ -42,7 +42,16 @@ static NSString *emptyString = @"";
     self.middleOfFirstNumber = NO;
     self.middleOfSecondNumber = NO;
     self.onFirstNumber = YES;
-    //self.twoValidNumbers = NO;
+	
+	self.firstBinaryLabel.adjustsFontSizeToFitWidth = YES;
+	self.secondBinaryLabel.adjustsFontSizeToFitWidth = YES;
+	self.totalLabel.adjustsFontSizeToFitWidth = YES;
+	
+//	UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+//	UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
+//	UITabBar *tabBar = tabBarController.tabBar;
+//	tabBar.translucent = NO;
+
 }
 
 - (void)didReceiveMemoryWarning

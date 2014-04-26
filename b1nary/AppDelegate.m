@@ -55,6 +55,7 @@
     //self.window.rootViewController = tabBarController;
 //    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
     UITabBar *tabBar = tabBarController.tabBar;
+	tabBar.translucent = NO;
     
     //[[UITabBar appearance] setShadowImage:[UIImage imageNamed:@"transparentSquare.png"]];
     

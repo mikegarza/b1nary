@@ -31,8 +31,8 @@ static NSString *emptyString = @"";
     self.decimalLabel.adjustsFontSizeToFitWidth = YES;
     self.hexLabel.adjustsFontSizeToFitWidth = YES;
     
-    //0.titleLabel.alpha = 0.0f;
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

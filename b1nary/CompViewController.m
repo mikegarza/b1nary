@@ -28,6 +28,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+	
+	self.view.backgroundColor = [UIColor colorWithRed:59/255.0f green:66/255.0f blue:65/255.0f alpha:1.0f];
+//	
+//	UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+//	UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
+//	UITabBar *tabBar = tabBarController.tabBar;
+//	tabBar.translucent = NO;
     
     // Create the score view controller
     AdditionViewController *additionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"AdditionViewController"];
@@ -65,8 +72,11 @@
         // Set the new view controller frame (in this case to be the size of the available screen bounds)
         // Calulate any other frame animations here (e.g. for the oldVC)
         //newVC.view.frame = CGRectMake(CGRectGetMinX(self.view.bounds), CGRectGetMinY(self.view.bounds), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
-        newVC.view.frame = CGRectMake(0, 110, 320, 325); //480 old height, 241
-        
+		CGSize iOSDeviceScreenSize = [[UIScreen mainScreen] bounds].size;
+		if (iOSDeviceScreenSize.height == 480)
+			newVC.view.frame = CGRectMake(0, 59, 320, 372); //480 old height, 241
+		else
+			newVC.view.frame = CGRectMake(0, 59, 320, 460);
         // Check the oldVC is non-nil otherwise expect a crash: NSInvalidArgumentException
         if (oldVC) {
             
