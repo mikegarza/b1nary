@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 
 @interface ComplementViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UILabel *binaryLabel;
-@property (weak, nonatomic) IBOutlet UILabel *signedLabel;
+@property (strong, nonatomic) IBOutlet UILabel *binaryLabel;
+@property (strong, nonatomic) IBOutlet UILabel *signedLabel;
+@property (strong, nonatomic) IBOutlet UILabel *decimalLabel;
+@property (strong, nonatomic) IBOutlet UILabel *numOfBits;
+
 
 - (IBAction)digitPressed:(UIButton *)sender;
 - (IBAction)clearPressed:(UIButton *)sender;
 - (IBAction)deletePressed:(UIButton *)sender;
+- (IBAction)incrementBits:(UIButton *)sender;
+- (IBAction)decrementBits:(UIButton *)sender;
+
 @end

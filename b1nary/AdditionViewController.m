@@ -14,7 +14,8 @@
 @property (nonatomic) BOOL middleOfFirstNumber;
 @property (nonatomic) BOOL middleOfSecondNumber;
 @property (nonatomic) BOOL onFirstNumber;
-//@property (nonatomic) BOOL twoValidNumbers;
+
+@property (nonatomic) UIView *selectedNumberBorder;
 
 @end
 
@@ -47,15 +48,17 @@ static NSString *emptyString = @"";
 	self.secondBinaryLabel.adjustsFontSizeToFitWidth = YES;
 	self.totalLabel.adjustsFontSizeToFitWidth = YES;
 	
-//	UIWindow* window = [[UIApplication sharedApplication] keyWindow];
-//	UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
-//	UITabBar *tabBar = tabBarController.tabBar;
-//	tabBar.translucent = NO;
+	CGRect rect = CGRectMake(30, 20, 284, 36);
+	self.selectedNumberBorder = [[UIView alloc] initWithFrame:rect];
+	self.selectedNumberBorder.backgroundColor = [UIColor clearColor];
+	self.selectedNumberBorder.layer.borderWidth = 0.5;
+	self.selectedNumberBorder.layer.cornerRadius = 5.0;
+	self.selectedNumberBorder.layer.borderColor = [UIColor whiteColor].CGColor;
+	[self.view addSubview:self.selectedNumberBorder];
 
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -195,10 +198,18 @@ static NSString *emptyString = @"";
 }
 
 - (IBAction)switchPressed:(UIButton *)sender {
-    if (self.onFirstNumber)
+    if (self.onFirstNumber) {
         self.onFirstNumber = NO;
-    else
+		[UIView animateWithDuration:0.3 animations:^{
+			self.selectedNumberBorder.frame = CGRectMake(self.selectedNumberBorder.frame.origin.x, self.selectedNumberBorder.frame.origin.y+40, self.selectedNumberBorder.frame.size.width, self.selectedNumberBorder.frame.size.height);
+		}];
+	}
+    else {
         self.onFirstNumber = YES;
+		[UIView animateWithDuration:0.3 animations:^{
+			self.selectedNumberBorder.frame = CGRectMake(self.selectedNumberBorder.frame.origin.x, self.selectedNumberBorder.frame.origin.y-40, self.selectedNumberBorder.frame.size.width, self.selectedNumberBorder.frame.size.height);
+		}];
+	}
 }
 
 - (IBAction)clearAllPressed:(UIButton *)sender {
@@ -208,6 +219,9 @@ static NSString *emptyString = @"";
     self.firstBinaryLabel.text = enterFirstBinNum;
     self.secondBinaryLabel.text = enterSecondBinNum;
     self.totalLabel.text = emptyString;
+	
+	CGRect borderOrigin = CGRectMake(30, 20, 284, 36);
+	self.selectedNumberBorder.frame = borderOrigin;
 }
 
 - (BOOL) twoValidNumbers {

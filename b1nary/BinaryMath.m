@@ -100,4 +100,49 @@
     return (NSString*)finalSum;
 }
 
++ (NSString *) twosComplement:(NSString*)binaryNum withWordSize:(int)wordSize{
+	// insert 0's up to word size
+	NSLog(@"Passed string = %@",binaryNum);
+	
+	NSMutableString *stringIn = [[NSMutableString alloc] initWithString:binaryNum];
+	while ([stringIn length] < wordSize) {
+		[stringIn insertString:@"0" atIndex:0];
+	}
+	
+	NSLog(@"Bufferred string = %@",stringIn);
+	// iterate through number and switch digits
+	for (int x = 0; x < [stringIn length]; x++) {
+		if ([stringIn characterAtIndex:x] == '0')
+			[stringIn replaceCharactersInRange:NSMakeRange(x, 1) withString:@"1"];
+		else
+			[stringIn replaceCharactersInRange:NSMakeRange(x, 1) withString:@"0"];
+	}
+	
+	NSLog(@"Switched = %@",stringIn);
+	NSMutableString *converted =  [[NSMutableString alloc] initWithString:[BinaryMath binaryAddition:stringIn withSecondNumber:@"1"]];
+	
+	while ([converted length] > wordSize) {
+		[converted deleteCharactersInRange:NSMakeRange(0, 1)];
+	}
+	NSLog(@"Converted = %@",converted);
+	return converted;
+}
+
++ (NSString *) twosComplementDecimalValue:(NSString *)binaryNum {
+	int negativeMSB = [binaryNum length] - 1;
+	long long int negativeStart = (int)pow(2,negativeMSB) * -1;
+	long long int currentPlaceValue = negativeStart * -1;
+	currentPlaceValue /= 2;
+	NSLog(@"Negative start = %lld", negativeStart);
+	
+	for (int x = 1; x < [binaryNum length]; x++) {
+		if ([binaryNum characterAtIndex:x] == '1')
+			negativeStart += currentPlaceValue;
+		currentPlaceValue /= 2;
+	}
+	NSLog(@"Decimal value = %lld",negativeStart);
+	return [NSString stringWithFormat:@"%lld",negativeStart];
+}
+
+
 @end
