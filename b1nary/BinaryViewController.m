@@ -108,6 +108,53 @@ static NSString *emptyString = @"";
     }
 }
 
+- (IBAction)saveButtonPressed:(UIButton *)sender {
+	if ([self.binaryLabel.text isEqualToString:enterBinNum]) {
+		UIAlertView *nothingToSave = [[UIAlertView alloc] initWithTitle:@"Nothing To Save" message:@"No conversion to save." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+		[nothingToSave show];
+		return;
+
+	}
+	NSString *savedString = [NSString stringWithFormat:@"B: %@\nD: %@\nH: %@\n\n",self.binaryLabel.text,self.decimalLabel.text,self.hexLabel.text];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"saved.txt"];
+	NSLog(@"filePath %@", filePath);
+	
+	if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
+		NSError *error;
+		[savedString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	}
+	else {
+		NSError *error;
+		NSString *textFromFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+		NSString *newString = [textFromFile stringByAppendingString:savedString];
+		[newString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	}
+	
+	if ([[NSFileManager defaultManager] isWritableFileAtPath:filePath]) {
+		NSLog(@"Writable");
+	}else {
+		NSLog(@"Not Writable");
+	}
+		
+	
+//	// Here you append new text to the existing one
+//	NSString *textToFile = [textFromFile stringByAppendingString:savedString];
+//	// Here you save the updated text to that file
+//	[textToFile writeToFile:documentFile atomically:YES encoding:NSUTF8StringEncoding error:&error];
+//	if (error)
+//		NSLog(@"Write to file error = %@",error);
+//	
+//	NSString *savedTextFromFile = [NSString stringWithContentsOfFile:documentFile encoding:NSUTF8StringEncoding error:nil];
+//	NSLog(@"Text file = %@",savedTextFromFile);
+	
+}
+
+- (IBAction)pasteButtonPressed:(UIButton *)sender {
+}
+
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }

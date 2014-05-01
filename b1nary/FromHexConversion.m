@@ -59,6 +59,8 @@
         count--;
     }
     NSLog(@"Bin = %@",converted);
+	while ([converted characterAtIndex:0] == '0')
+		[converted deleteCharactersInRange:range];
     return (NSString*)converted;
 }
 + (NSString *) hexToDecimal:(NSString *) hexNum {

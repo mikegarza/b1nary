@@ -13,5 +13,7 @@
 + (NSString *) binaryAddition:(NSString *)firstNum withSecondNumber:(NSString *)secondNum;
 + (NSString *) twosComplement:(NSString *)binaryNum withWordSize:(int)wordSize;
 + (NSString *) twosComplementDecimalValue:(NSString *)binaryNum;
++ (BOOL) validUnsignedNumber:(NSString *)binaryNum withWordSize:(int)wordSize;
+
 
 @end

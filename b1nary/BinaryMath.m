@@ -7,6 +7,7 @@
 //
 
 #import "BinaryMath.h"
+#import "FromBinaryConversion.h"
 
 @implementation BinaryMath
 
@@ -103,6 +104,8 @@
 + (NSString *) twosComplement:(NSString*)binaryNum withWordSize:(int)wordSize{
 	// insert 0's up to word size
 	NSLog(@"Passed string = %@",binaryNum);
+	if ([binaryNum intValue] == 0)
+		return @"0";
 	
 	NSMutableString *stringIn = [[NSMutableString alloc] initWithString:binaryNum];
 	while ([stringIn length] < wordSize) {
@@ -121,14 +124,20 @@
 	NSLog(@"Switched = %@",stringIn);
 	NSMutableString *converted =  [[NSMutableString alloc] initWithString:[BinaryMath binaryAddition:stringIn withSecondNumber:@"1"]];
 	
+	NSLog(@"Converted before = %@",converted);
 	while ([converted length] > wordSize) {
 		[converted deleteCharactersInRange:NSMakeRange(0, 1)];
 	}
 	NSLog(@"Converted = %@",converted);
+	if ([converted characterAtIndex:0] == '0')
+		[converted replaceCharactersInRange:NSMakeRange(0,1) withString:@"1"];
 	return converted;
 }
 
 + (NSString *) twosComplementDecimalValue:(NSString *)binaryNum {
+	if ([binaryNum intValue] == 0)
+		return @"0";
+	
 	int negativeMSB = [binaryNum length] - 1;
 	long long int negativeStart = (int)pow(2,negativeMSB) * -1;
 	long long int currentPlaceValue = negativeStart * -1;
@@ -142,6 +151,19 @@
 	}
 	NSLog(@"Decimal value = %lld",negativeStart);
 	return [NSString stringWithFormat:@"%lld",negativeStart];
+}
+
++ (BOOL) validUnsignedNumber:(NSString *)binaryNum withWordSize:(int)wordSize {
+	if (wordSize == 8 && [[FromBinaryConversion binaryToDecimal:binaryNum] intValue] > 128)
+		return false;
+	else if (wordSize == 16 && [[FromBinaryConversion binaryToDecimal:binaryNum] intValue] > 32768)
+		return false;
+	else if (wordSize == 24 && [[FromBinaryConversion binaryToDecimal:binaryNum] intValue] > 8388608)
+		return false;
+	else if (wordSize == 32 && [[FromBinaryConversion binaryToDecimal:binaryNum] longLongValue] > 2147483648)
+		return false;
+	else
+		return true;
 }
 
 

@@ -10,4 +10,8 @@
 
 @interface HelpViewController : UIViewController
 
+@property (nonatomic,strong) UIScrollView *mainScrollView;
+@property (nonatomic,strong) UIScrollView *savedScrollView;
+@property (nonatomic,strong) UIScrollView *helpScrollView;
+
 @end

@@ -30,6 +30,7 @@
 	// Do any additional setup after loading the view.
 	
 	self.view.backgroundColor = [UIColor colorWithRed:59/255.0f green:66/255.0f blue:65/255.0f alpha:1.0f];
+	self.switchViewController.tintColor = [UIColor colorWithRed:32/255.0f green:164/255.0f blue:147/255.0f alpha:1.0f];
 //	
 //	UIWindow* window = [[UIApplication sharedApplication] keyWindow];
 //	UITabBarController *tabBarController = (UITabBarController *)window.rootViewController;
