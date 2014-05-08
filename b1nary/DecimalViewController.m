@@ -28,7 +28,14 @@ static NSString *emptyString = @"";
     self.decimalLabel.adjustsFontSizeToFitWidth = YES;
     self.hexLabel.adjustsFontSizeToFitWidth = YES;
 	// Do any additional setup after loading the view, typically from a nib.
-    [FromDecimalConversion decimalToBinary:@"164"];
+    //[FromDecimalConversion decimalToBinary:@"164"];
+	UITapGestureRecognizer *tapGestureBinary = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyBinary)];
+	tapGestureBinary.numberOfTapsRequired = 1;
+	[self.binaryLabel addGestureRecognizer:tapGestureBinary];
+	
+	UITapGestureRecognizer *tapGestureHex = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyHex)];
+	tapGestureHex.numberOfTapsRequired = 1;
+	[self.hexLabel addGestureRecognizer:tapGestureHex];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -101,8 +108,64 @@ static NSString *emptyString = @"";
 
 }
 
+- (IBAction)saveButtonPressed:(UIButton *)sender {
+	if ([self.decimalLabel.text isEqualToString:enterDecNum]) {
+		UIAlertView *nothingToSave = [[UIAlertView alloc] initWithTitle:@"Nothing To Save" message:@"No conversion to save." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+		[nothingToSave show];
+		return;
+		
+	}
+	NSString *savedString = [NSString stringWithFormat:@"B: %@\nD: %@\nH: %@\n\n",self.binaryLabel.text,self.decimalLabel.text,self.hexLabel.text];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"saved.txt"];
+	NSLog(@"filePath %@", filePath);
+	
+	if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
+		NSError *error;
+		[savedString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	}
+	else {
+		NSError *error;
+		NSString *textFromFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+		NSString *newString = [textFromFile stringByAppendingString:savedString];
+		[newString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	}
+}
+
+- (IBAction)pasteButtonPressed:(UIButton *)sender {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	NSString *string = pasteboard.string;
+	NSLog(@"%@",string);
+	NSString *fixedString = [FromDecimalConversion decimalDigits:string];
+	
+	if ([fixedString longLongValue] > 4294967295 || [fixedString isEqualToString:@""]) {
+		UIAlertView *invalid = [[UIAlertView alloc] initWithTitle:@"Invalid" message:@"Pasted number is not a valid decimal number or is too large." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+		[invalid show];
+	}
+	else {
+		UIButton *temp = [[UIButton alloc] init];
+		[temp setTitle:fixedString forState:UIControlStateNormal];
+		[self clearPressed:nil];
+		[self digitPressed:temp];
+	}
+}
+
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
+}
+
+- (void) copyBinary {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	pasteboard.string = self.binaryLabel.text;
+	NSLog(@"Copied %@",pasteboard.string);
+}
+
+- (void) copyHex {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	pasteboard.string = self.hexLabel.text;
+	NSLog(@"Copied %@",pasteboard.string);
 }
 
 @end

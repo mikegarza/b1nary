@@ -32,6 +32,7 @@
 		27A81BF618A4D07B00FD00ED /* AdditionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A81BF518A4D07B00FD00ED /* AdditionViewController.m */; };
 		27A81BF918A4D09E00FD00ED /* ComplementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A81BF818A4D09E00FD00ED /* ComplementViewController.m */; };
 		27A81BFC18A4D0A800FD00ED /* SignedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A81BFB18A4D0A800FD00ED /* SignedViewController.m */; };
+		27BEA5E2191B686400BBB9CE /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BEA5E1191B686400BBB9CE /* MessageUI.framework */; };
 		27C142D318AF4AF90091D3D2 /* BinaryMath.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C142D218AF4AF90091D3D2 /* BinaryMath.m */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +87,7 @@
 		27A81BF818A4D09E00FD00ED /* ComplementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComplementViewController.m; sourceTree = "<group>"; };
 		27A81BFA18A4D0A800FD00ED /* SignedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignedViewController.h; sourceTree = "<group>"; };
 		27A81BFB18A4D0A800FD00ED /* SignedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignedViewController.m; sourceTree = "<group>"; };
+		27BEA5E1191B686400BBB9CE /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		27C142D118AF4AF90091D3D2 /* BinaryMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryMath.h; sourceTree = "<group>"; };
 		27C142D218AF4AF90091D3D2 /* BinaryMath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BinaryMath.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27BEA5E2191B686400BBB9CE /* MessageUI.framework in Frameworks */,
 				2715B29C1895D07000388251 /* CoreGraphics.framework in Frameworks */,
 				2715B29E1895D07000388251 /* UIKit.framework in Frameworks */,
 				2715B29A1895D07000388251 /* Foundation.framework in Frameworks */,
@@ -136,6 +139,7 @@
 		2715B2981895D07000388251 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				27BEA5E1191B686400BBB9CE /* MessageUI.framework */,
 				2715B2991895D07000388251 /* Foundation.framework */,
 				2715B29B1895D07000388251 /* CoreGraphics.framework */,
 				2715B29D1895D07000388251 /* UIKit.framework */,

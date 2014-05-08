@@ -84,5 +84,12 @@
     return finalConverted;
 }
 
++ (NSString *) decimalDigits:(NSString *) decimalNum {
+	NSCharacterSet *charSet = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
+	NSString *temp = [[decimalNum componentsSeparatedByCharactersInSet:charSet] componentsJoinedByString:@""];
+	//NSLog(@"Modified = %@",temp);
+	return temp;
+}
+
 @end
 

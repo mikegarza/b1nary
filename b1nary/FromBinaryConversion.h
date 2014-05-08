@@ -12,5 +12,6 @@
 
 + (NSString *) binaryToDecimal:(NSString *) binaryNum;
 + (NSString *) binaryToHex:(NSString *) binaryNum;
++ (NSString *) binaryDigits:(NSString *) binaryNum;
 
 @end

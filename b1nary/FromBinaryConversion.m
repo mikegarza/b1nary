@@ -117,4 +117,12 @@
     return (NSString*)convertedString;
 }
 
++ (NSString *) binaryDigits:(NSString *) binaryNum {
+
+	NSCharacterSet *charSet = [[NSCharacterSet characterSetWithCharactersInString:@"01"] invertedSet];
+	NSString *temp = [[binaryNum componentsSeparatedByCharactersInSet:charSet] componentsJoinedByString:@""];
+	//NSLog(@"Modified = %@",temp);
+	return temp;
+}
+
 @end

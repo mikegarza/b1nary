@@ -8,6 +8,7 @@
 
 #import "ComplementViewController.h"
 #import "BinaryMath.h"
+#import "FromBinaryConversion.h"
 
 @interface ComplementViewController ()
 
@@ -40,9 +41,17 @@ static int currentBitSize = 8;
 	self.numOfBits.adjustsFontSizeToFitWidth = YES;
 	self.middleOfNumber = NO;
 	
-	[BinaryMath twosComplement:@"10010" withWordSize:8];
-	[BinaryMath twosComplement:@"11111" withWordSize:8];
-	[BinaryMath twosComplementDecimalValue:@"00000000"];
+	//[BinaryMath twosComplement:@"10010" withWordSize:8];
+	//[BinaryMath twosComplement:@"11111" withWordSize:8];
+	//[BinaryMath twosComplementDecimalValue:@"00000000"];
+	
+	UITapGestureRecognizer *tapGestureBinary = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyBinary)];
+	tapGestureBinary.numberOfTapsRequired = 1;
+	[self.signedLabel addGestureRecognizer:tapGestureBinary];
+	
+	UITapGestureRecognizer *tapGestureDecimal = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyDecimal)];
+	tapGestureDecimal.numberOfTapsRequired = 1;
+	[self.decimalLabel addGestureRecognizer:tapGestureDecimal];
 }
 
 - (void)didReceiveMemoryWarning
@@ -174,5 +183,67 @@ static int currentBitSize = 8;
 //	UIAlertView *tooLarge = [[UIAlertView alloc] initWithTitle:@"Number too large!" message:@"The number entered is too large for the current word size. Please try a smaller number or a larger word size." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
 //	[tooLarge show];
 
+}
+
+- (IBAction)saveButtonPressed:(UIButton *)sender {
+	if ([self.binaryLabel.text isEqualToString:enterBinNum]) {
+		UIAlertView *nothingToSave = [[UIAlertView alloc] initWithTitle:@"Nothing To Save" message:@"No conversion to save." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+		[nothingToSave show];
+		return;
+		
+	}
+	NSString *savedString = [NSString stringWithFormat:@"B: %@\n-: %@\nD: %@\n\n",self.binaryLabel.text,self.signedLabel.text,self.decimalLabel.text];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"saved.txt"];
+	NSLog(@"filePath %@", filePath);
+	
+	if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
+		NSError *error;
+		[savedString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	}
+	else {
+		NSError *error;
+		NSString *textFromFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+		NSString *newString = [textFromFile stringByAppendingString:savedString];
+		[newString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	}
+}
+
+- (IBAction)pasteButtonPressed:(UIButton *)sender {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	NSString *string = pasteboard.string;
+	NSLog(@"%@",string);
+	NSString *fixedString = [FromBinaryConversion binaryDigits:string];
+	
+	if ([fixedString length] > 32 || [fixedString isEqualToString:@""]) {
+		UIAlertView *invalid = [[UIAlertView alloc] initWithTitle:@"Invalid" message:@"Pasted number is not a valid binary number or is larger than 32 bits." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+		[invalid show];
+	}
+	else {
+		if ([BinaryMath validUnsignedNumber:fixedString withWordSize:currentBitSize]) {
+			UIButton *temp = [[UIButton alloc] init];
+			[temp setTitle:fixedString forState:UIControlStateNormal];
+			[self clearPressed:nil];
+			[self digitPressed:temp];
+		}
+		else {
+			UIAlertView *tooLarge = [[UIAlertView alloc] initWithTitle:@"Number too large!" message:@"The number pasted is too large for the current word size. Please try a smaller number or a larger word size." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+			[tooLarge show];
+		}
+	}
+}
+
+- (void) copyBinary {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	pasteboard.string = self.signedLabel.text;
+	NSLog(@"Copied %@",pasteboard.string);
+}
+
+- (void) copyDecimal {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	pasteboard.string = self.decimalLabel.text;
+	NSLog(@"Copied %@",pasteboard.string);
 }
 @end

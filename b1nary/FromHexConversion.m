@@ -108,4 +108,11 @@
     return converted;
 }
 
++ (NSString *) hexDigits:(NSString *) hexNum {
+	NSCharacterSet *charSet = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789ABCDEF"] invertedSet];
+	NSString *temp = [[hexNum componentsSeparatedByCharactersInSet:charSet] componentsJoinedByString:@""];
+	//NSLog(@"Modified = %@",temp);
+	return temp;
+}
+
 @end

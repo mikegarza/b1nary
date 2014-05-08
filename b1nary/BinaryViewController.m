@@ -30,6 +30,14 @@ static NSString *emptyString = @"";
     self.binaryLabel.adjustsFontSizeToFitWidth = YES;
     self.decimalLabel.adjustsFontSizeToFitWidth = YES;
     self.hexLabel.adjustsFontSizeToFitWidth = YES;
+	
+	UITapGestureRecognizer *tapGestureDecimal = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyDecimal)];
+	tapGestureDecimal.numberOfTapsRequired = 1;
+	[self.decimalLabel addGestureRecognizer:tapGestureDecimal];
+	
+	UITapGestureRecognizer *tapGestureHex = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyHex)];
+	tapGestureHex.numberOfTapsRequired = 1;
+	[self.hexLabel addGestureRecognizer:tapGestureHex];
     
 }
 
@@ -152,11 +160,47 @@ static NSString *emptyString = @"";
 	
 }
 
+//- (void)copy {
+//	
+//    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+//    pasteboard.string = @"String";
+//}
+
+
+
+
 - (IBAction)pasteButtonPressed:(UIButton *)sender {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	NSString *string = pasteboard.string;
+	NSLog(@"%@",string);
+	NSString *fixedString = [FromBinaryConversion binaryDigits:string];
+	
+	if ([fixedString length] > 32 || [fixedString isEqualToString:@""]) {
+		UIAlertView *invalid = [[UIAlertView alloc] initWithTitle:@"Invalid" message:@"Pasted number is not a valid binary number or is larger than 32 bits." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+		[invalid show];
+	}
+	else {
+		UIButton *temp = [[UIButton alloc] init];
+		[temp setTitle:fixedString forState:UIControlStateNormal];
+		[self clearPressed:nil];
+		[self digitPressed:temp];
+	}
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
+}
+
+- (void) copyDecimal {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	pasteboard.string = self.decimalLabel.text;
+	NSLog(@"Copied %@",pasteboard.string);
+}
+
+- (void) copyHex {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	pasteboard.string = self.hexLabel.text;
+	NSLog(@"Copied %@",pasteboard.string);
 }
 
 @end

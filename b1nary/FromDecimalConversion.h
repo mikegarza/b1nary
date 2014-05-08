@@ -12,5 +12,7 @@
 
 + (NSString *) decimalToBinary:(NSString *) decimalNum;
 + (NSString *) decimalToHex:(NSString *) decimalNum;
++ (NSString *) decimalDigits:(NSString *) decimalNum;
+
 
 @end

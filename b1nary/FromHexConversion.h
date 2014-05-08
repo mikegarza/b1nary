@@ -12,5 +12,7 @@
 
 + (NSString *) hexToBinary:(NSString *) hexNum;
 + (NSString *) hexToDecimal:(NSString *) hexNum;
++ (NSString *) hexDigits:(NSString *) hexNum;
+
 
 @end

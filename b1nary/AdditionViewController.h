@@ -19,5 +19,8 @@
 - (IBAction)deletePressed:(UIButton *)sender;
 - (IBAction)switchPressed:(UIButton *)sender;
 - (IBAction)clearAllPressed:(UIButton *)sender;
+- (IBAction)saveButtonPressed:(UIButton *)sender;
+- (IBAction)pasteButtonPressed:(UIButton *)sender;
+
 
 @end

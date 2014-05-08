@@ -20,5 +20,8 @@
 - (IBAction)deletePressed:(UIButton *)sender;
 - (IBAction)incrementBits:(UIButton *)sender;
 - (IBAction)decrementBits:(UIButton *)sender;
+- (IBAction)saveButtonPressed:(UIButton *)sender;
+- (IBAction)pasteButtonPressed:(UIButton *)sender;
+
 
 @end

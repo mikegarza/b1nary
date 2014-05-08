@@ -8,6 +8,7 @@
 
 #import "AdditionViewController.h"
 #import "BinaryMath.h"
+#import "FromBinaryConversion.h"
 
 @interface AdditionViewController ()
 
@@ -55,6 +56,10 @@ static NSString *emptyString = @"";
 	self.selectedNumberBorder.layer.cornerRadius = 5.0;
 	self.selectedNumberBorder.layer.borderColor = [UIColor whiteColor].CGColor;
 	[self.view addSubview:self.selectedNumberBorder];
+	
+	UITapGestureRecognizer *tapGestureBinary = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyBinary)];
+	tapGestureBinary.numberOfTapsRequired = 1;
+	[self.totalLabel addGestureRecognizer:tapGestureBinary];
 
 }
 
@@ -224,6 +229,50 @@ static NSString *emptyString = @"";
 	self.selectedNumberBorder.frame = borderOrigin;
 }
 
+- (IBAction)saveButtonPressed:(UIButton *)sender {
+	if ([self.firstBinaryLabel.text isEqualToString:enterFirstBinNum] || [self.secondBinaryLabel.text isEqualToString:enterSecondBinNum]) {
+		UIAlertView *nothingToSave = [[UIAlertView alloc] initWithTitle:@"Nothing To Save" message:@"There is no sum to save." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+		[nothingToSave show];
+		return;
+		
+	}
+	NSString *savedString = [NSString stringWithFormat:@"  %@\n+ %@\n  %@\n\n",self.firstBinaryLabel.text,self.secondBinaryLabel.text,self.totalLabel.text];
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"saved.txt"];
+	NSLog(@"filePath %@", filePath);
+	
+	if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
+		NSError *error;
+		[savedString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	}
+	else {
+		NSError *error;
+		NSString *textFromFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+		NSString *newString = [textFromFile stringByAppendingString:savedString];
+		[newString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+	}
+}
+
+- (IBAction)pasteButtonPressed:(UIButton *)sender {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	NSString *string = pasteboard.string;
+	NSLog(@"%@",string);
+	NSString *fixedString = [FromBinaryConversion binaryDigits:string];
+	
+	if ([fixedString length] > 32 || [fixedString isEqualToString:@""]) {
+		UIAlertView *invalid = [[UIAlertView alloc] initWithTitle:@"Invalid" message:@"Pasted number is not a valid binary number or is larger than 32 bits." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+		[invalid show];
+	}
+	else {
+		UIButton *temp = [[UIButton alloc] init];
+		[temp setTitle:fixedString forState:UIControlStateNormal];
+		[self clearPressed:nil];
+		[self digitPressed:temp];
+	}
+}
+
 - (BOOL) twoValidNumbers {
     NSString *firstNum = [[NSString alloc] initWithString:self.firstBinaryLabel.text];
     NSString *secondNum = [[NSString alloc] initWithString:self.secondBinaryLabel.text];
@@ -232,5 +281,11 @@ static NSString *emptyString = @"";
     }
     else
         return YES;
+}
+
+- (void) copyBinary {
+	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+	pasteboard.string = self.totalLabel.text;
+	NSLog(@"Copied %@",pasteboard.string);
 }
 @end
