@@ -11,6 +11,7 @@
 @interface HelpViewController ()
 
 @property (nonatomic, strong) UITextView *textView;
+@property (nonatomic) BOOL iPhone4;
 
 @end
 
@@ -26,24 +27,59 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	CGSize iOSDeviceScreenSize = [[UIScreen mainScreen] bounds].size;
+	if (iOSDeviceScreenSize.height == 480)
+		self.iPhone4 = YES;
+	else
+		self.iPhone4 = NO;
 	// Do any additional setup after loading the view.
 	self.view.backgroundColor = [UIColor colorWithRed:28/255.0f green:191/255.0f blue:170/255.0f alpha:1.0f];
-	CGRect rect = CGRectMake(0, 69, 320, 450);
+	
+	CGRect rect;
+	if (self.iPhone4)
+		rect = CGRectMake(0, 69, 320, 342);
+	else
+		rect = CGRectMake(0, 69, 320, 430);
 	self.mainScrollView = [[UIScrollView alloc] initWithFrame:rect];
 	self.mainScrollView.contentSize = CGSizeMake(640,self.mainScrollView.frame.size.height);
 	self.mainScrollView.pagingEnabled = YES;
 	self.mainScrollView.userInteractionEnabled = YES;
+	self.mainScrollView.delegate = self;
 	
-	self.savedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 450)];
-	self.savedScrollView.contentSize = CGSizeMake(self.savedScrollView.frame.size.width, 450);
+	if (self.iPhone4) {
+		self.savedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 342)];
+		self.savedScrollView.contentSize = CGSizeMake(self.savedScrollView.frame.size.width, 342);
+	}
+	else {
+		self.savedScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 430)];
+		self.savedScrollView.contentSize = CGSizeMake(self.savedScrollView.frame.size.width, 450);
+	}
+	
+	self.mainScrollView.userInteractionEnabled = YES;
 	[self.mainScrollView addSubview:self.savedScrollView];
 	
 //	UIView *rightView = [[UIView alloc] initWithFrame:CGRectMake(320, 0, 320, 450)];
 //	rightView.backgroundColor = [UIColor blackColor];
 //	[self.scrollView addSubview:rightView];
 	
-	self.helpScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(320, 0, 320, 450)];
-	self.helpScrollView.contentSize = CGSizeMake(self.helpScrollView.frame.size.width, 100);
+	if (self.iPhone4)
+		self.helpScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(320, 0, 320, 342)];
+	else
+		self.helpScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(320, 0, 320, 430)];
+	
+	self.helpScrollView.contentSize = CGSizeMake(self.helpScrollView.frame.size.width, 1222);
+	self.helpScrollView.userInteractionEnabled = YES;
+	self.helpScrollView.multipleTouchEnabled = YES;
+	self.faqView.multipleTouchEnabled = YES;
+	
+	if (self.iPhone4)
+		self.faqView.frame = CGRectMake(0, 0, self.faqView.frame.size.width, self.faqView.frame.size.height);
+	else
+		self.faqView.frame = CGRectMake(-158, -625, self.faqView.frame.size.width, self.faqView.frame.size.height);
+	self.faqView.hidden = NO;
+	self.faqView.userInteractionEnabled = YES;
+	[self.helpScrollView addSubview:self.faqView];
 	[self.mainScrollView addSubview:self.helpScrollView];
 	
 	[self.view addSubview:self.mainScrollView];
@@ -53,7 +89,10 @@
 //	leftLabel.textAlignment = NSTextAlignmentCenter;
 //	leftLabel.text = @"Saved list!";
 	
-	self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0,0,self.savedScrollView.frame.size.width, 450)];
+	if (self.iPhone4)
+		self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0,0,self.savedScrollView.frame.size.width, 342)];
+	else
+		self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0,0,self.savedScrollView.frame.size.width, 450)];
 	self.textView.contentSize = CGSizeMake(self.savedScrollView.contentSize.width, self.savedScrollView.contentSize.height);
 	self.textView.textColor = [UIColor whiteColor];
 	self.textView.backgroundColor = [UIColor clearColor];
@@ -64,6 +103,22 @@
 	self.textView.editable = NO;
 	//[self.savedScrollView addSubview:leftLabel];
 	[self.savedScrollView addSubview:self.textView];
+	
+	self.pageControl.currentPage = 0;
+	self.pageControl.userInteractionEnabled = NO;
+	
+	UITapGestureRecognizer *tapEmail = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(emailMe:)];
+	tapEmail.numberOfTapsRequired = 1;
+	tapEmail.enabled = YES;
+	tapEmail.cancelsTouchesInView = NO;
+	[self.contactMeLabel addGestureRecognizer:tapEmail];
+	self.contactMeLabel.exclusiveTouch = YES;
+	self.contactMeLabel.userInteractionEnabled = YES;
+	self.contactMeLabel.frame = CGRectMake(self.contactMeLabel.frame.origin.x, self.contactMeLabel.frame.origin.y-20, self.contactMeLabel.frame.size.width, self.contactMeLabel.frame.size.height);
+	
+	[self.helpScrollView addSubview:self.contactMeLabel];
+	
+	NSLog(@"Subviews = %@",self.mainScrollView.subviews);
 	
 //	UILabel *rightLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.helpScrollView.frame.size.width, 50)];
 //	rightLabel.textColor = [UIColor whiteColor];
@@ -87,14 +142,14 @@
 		NSLog(@"Document found");
 		NSString *savedTextFromFile = [NSString stringWithContentsOfFile:documentFile encoding:NSUTF8StringEncoding error:nil];
 		NSArray *array = [savedTextFromFile componentsSeparatedByString:@"\n"];
-		NSLog(@"Array count = %d",[array count]);
-		NSLog(@"Saved string = %@",savedTextFromFile);
+		//NSLog(@"Array count = %d",[array count]);
+		//NSLog(@"Saved string = %@",savedTextFromFile);
 		self.textView.text = savedTextFromFile;
 		self.textView.frame = CGRectMake(0, 0, self.textView.frame.size.width, [array count]*18);
 		self.savedScrollView.contentSize = CGSizeMake(self.savedScrollView.frame.size.width, [array count]*18);
 	}
 	else
-		self.textView.text = @"";
+		self.textView.text = @"No saved conversion history.";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -132,8 +187,23 @@
 	}
 }
 
-- (IBAction)sendConversionPressed:(UIButton *)sender {
+- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+	float fractionalPage = scrollView.contentOffset.x / scrollView.frame.size.width;
+	NSLog(@"Origin = %f",fractionalPage);
+	self.pageControl.currentPage = fractionalPage;
+	
+	if (fractionalPage == 0) {
+		self.titleLabel.text = @"Saved Conversions";
+		self.emailConversionButton.hidden = NO;
+		self.deleteButton.hidden = NO;
+	}
+	else {
+		self.titleLabel.text = @"Help";
+		self.emailConversionButton.hidden = YES;
+		self.deleteButton.hidden = YES;
+	}
 }
+
 
 - (IBAction)emailSaved:(UIButton *)sender {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -164,6 +234,23 @@
 			UIAlertView *connectionFailed = [[UIAlertView alloc] initWithTitle:@"E-mail Error" message:@"No functioning e-mail account found." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
 			[connectionFailed show];
 		}
+	}
+}
+
+- (void) emailMe:(UIEvent *)event {
+	NSLog(@"Send mike an email");
+	if ([MFMailComposeViewController canSendMail]) {
+		NSArray *toRecipents = [NSArray arrayWithObject:@"b1narytheapp@gmail.com"];
+		
+		MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+		mc.mailComposeDelegate = self;
+		[mc setToRecipients:toRecipents];
+		// Present mail view controller on screen
+		[self presentViewController:mc animated:YES completion:NULL];
+	}
+	else {
+		UIAlertView *connectionFailed = [[UIAlertView alloc] initWithTitle:@"E-mail Error" message:@"No functioning e-mail account found." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+		[connectionFailed show];
 	}
 }
 

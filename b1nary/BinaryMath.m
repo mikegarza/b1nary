@@ -138,7 +138,7 @@
 	if ([binaryNum intValue] == 0)
 		return @"0";
 	
-	int negativeMSB = [binaryNum length] - 1;
+	int negativeMSB = (int)[binaryNum length] - 1;
 	long long int negativeStart = (int)pow(2,negativeMSB) * -1;
 	long long int currentPlaceValue = negativeStart * -1;
 	currentPlaceValue /= 2;

@@ -52,21 +52,28 @@ static NSString *emptyString = @"";
 // 0 or 1 is pressed
 - (IBAction)digitPressed:(UIButton *)sender {
     NSString *digit = [sender currentTitle];
-    if (self.middleOfNumber) {
-        self.binaryLabel.text = [self.binaryLabel.text stringByAppendingString:digit];
-        self.decimalLabel.text = [FromBinaryConversion binaryToDecimal:self.binaryLabel.text];
-        self.hexLabel.text = [FromBinaryConversion binaryToHex:self.binaryLabel.text];
-        [self.decimalLabel setNeedsDisplay];
-        [self.hexLabel setNeedsDisplay];
-    }
-    else {
-        self.binaryLabel.text = digit;
-        self.decimalLabel.text = [FromBinaryConversion binaryToDecimal:self.binaryLabel.text];
-        self.hexLabel.text = [FromBinaryConversion binaryToHex:self.binaryLabel.text];
-        [self.decimalLabel setNeedsDisplay];
-        [self.hexLabel setNeedsDisplay];
-        self.middleOfNumber = YES;
-    }
+		if (self.middleOfNumber) {
+			if (!([self.binaryLabel.text length] >= 32)) {
+				self.binaryLabel.text = [self.binaryLabel.text stringByAppendingString:digit];
+				self.decimalLabel.text = [FromBinaryConversion binaryToDecimal:self.binaryLabel.text];
+				self.hexLabel.text = [FromBinaryConversion binaryToHex:self.binaryLabel.text];
+				[self.decimalLabel setNeedsDisplay];
+				[self.hexLabel setNeedsDisplay];
+			}
+			else {
+				UIAlertView *capacity = [[UIAlertView alloc] initWithTitle:@"At Capacity" message:@"Number is already at the maximum number of bits : 32" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+				[capacity show];
+
+			}
+		}
+		else {
+			self.binaryLabel.text = digit;
+			self.decimalLabel.text = [FromBinaryConversion binaryToDecimal:self.binaryLabel.text];
+			self.hexLabel.text = [FromBinaryConversion binaryToHex:self.binaryLabel.text];
+			[self.decimalLabel setNeedsDisplay];
+			[self.hexLabel setNeedsDisplay];
+			self.middleOfNumber = YES;
+		}
 }
 
 // clear button pressed
@@ -173,7 +180,11 @@ static NSString *emptyString = @"";
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	NSString *string = pasteboard.string;
 	NSLog(@"%@",string);
-	NSString *fixedString = [FromBinaryConversion binaryDigits:string];
+	NSString *fixedString;
+	if (string)
+		fixedString = [FromBinaryConversion binaryDigits:string];
+	else
+		fixedString = @"";
 	
 	if ([fixedString length] > 32 || [fixedString isEqualToString:@""]) {
 		UIAlertView *invalid = [[UIAlertView alloc] initWithTitle:@"Invalid" message:@"Pasted number is not a valid binary number or is larger than 32 bits." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
@@ -195,12 +206,22 @@ static NSString *emptyString = @"";
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.decimalLabel.text;
 	NSLog(@"Copied %@",pasteboard.string);
+	[UIView animateWithDuration:0.3 animations:^{
+		self.decimalLabel.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		self.decimalLabel.alpha = 1.0;
+	}];
 }
 
 - (void) copyHex {
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.hexLabel.text;
 	NSLog(@"Copied %@",pasteboard.string);
+	[UIView animateWithDuration:0.3 animations:^{
+		self.hexLabel.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		self.hexLabel.alpha = 1.0;
+	}];
 }
 
 @end

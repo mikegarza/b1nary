@@ -15,6 +15,7 @@
 @property (nonatomic) BOOL middleOfFirstNumber;
 @property (nonatomic) BOOL middleOfSecondNumber;
 @property (nonatomic) BOOL onFirstNumber;
+@property (nonatomic) BOOL iPhone4;
 
 @property (nonatomic) UIView *selectedNumberBorder;
 
@@ -40,6 +41,13 @@ static NSString *emptyString = @"";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	
+	CGSize iOSDeviceScreenSize = [[UIScreen mainScreen] bounds].size;
+	if (iOSDeviceScreenSize.height == 480)
+		self.iPhone4 = YES;
+	else
+		self.iPhone4 = NO;
+	
 	// Do any additional setup after loading the view.
     self.middleOfFirstNumber = NO;
     self.middleOfSecondNumber = NO;
@@ -49,7 +57,11 @@ static NSString *emptyString = @"";
 	self.secondBinaryLabel.adjustsFontSizeToFitWidth = YES;
 	self.totalLabel.adjustsFontSizeToFitWidth = YES;
 	
-	CGRect rect = CGRectMake(30, 20, 284, 36);
+	CGRect rect;
+	if (self.iPhone4)
+		rect = CGRectMake(30, 18, 284, 26);
+	else
+		rect = CGRectMake(30, 20, 284, 36);
 	self.selectedNumberBorder = [[UIView alloc] initWithFrame:rect];
 	self.selectedNumberBorder.backgroundColor = [UIColor clearColor];
 	self.selectedNumberBorder.layer.borderWidth = 0.5;
@@ -74,12 +86,19 @@ static NSString *emptyString = @"";
     if (self.onFirstNumber) {
         // if currently entering a number
         if (self.middleOfFirstNumber) {
-            self.firstBinaryLabel.text = [self.firstBinaryLabel.text stringByAppendingString:digit];
-            // if there are two valid numbers, do the addition
-            if ([self twoValidNumbers]) {
-                self.totalLabel.text = [BinaryMath binaryAddition:self.firstBinaryLabel.text withSecondNumber:self.secondBinaryLabel.text];
-                [self.totalLabel setNeedsDisplay];
-            }
+			if (!([self.firstBinaryLabel.text length] >= 32)) {
+				self.firstBinaryLabel.text = [self.firstBinaryLabel.text stringByAppendingString:digit];
+				// if there are two valid numbers, do the addition
+				if ([self twoValidNumbers]) {
+					self.totalLabel.text = [BinaryMath binaryAddition:self.firstBinaryLabel.text withSecondNumber:self.secondBinaryLabel.text];
+					[self.totalLabel setNeedsDisplay];
+				}
+			}
+			else {
+				UIAlertView *capacity = [[UIAlertView alloc] initWithTitle:@"At Capacity" message:@"Number is already at the maximum number of bits : 32" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+				[capacity show];
+				
+			}
         }
         // else first digit
         else {
@@ -96,12 +115,19 @@ static NSString *emptyString = @"";
     else {
         // if currently entering a number
         if (self.middleOfSecondNumber) {
-            self.secondBinaryLabel.text = [self.secondBinaryLabel.text stringByAppendingString:digit];
-            // if two valid numbers, do the addition
-            if ([self twoValidNumbers]) {
-                self.totalLabel.text = [BinaryMath binaryAddition:self.firstBinaryLabel.text withSecondNumber:self.secondBinaryLabel.text];
-                [self.totalLabel setNeedsDisplay];
-            }
+			if (!([self.secondBinaryLabel.text length] >= 32)) {
+				self.secondBinaryLabel.text = [self.secondBinaryLabel.text stringByAppendingString:digit];
+				// if two valid numbers, do the addition
+				if ([self twoValidNumbers]) {
+					self.totalLabel.text = [BinaryMath binaryAddition:self.firstBinaryLabel.text withSecondNumber:self.secondBinaryLabel.text];
+					[self.totalLabel setNeedsDisplay];
+				}
+			}
+			else {
+				UIAlertView *capacity = [[UIAlertView alloc] initWithTitle:@"At Capacity" message:@"Number is already at the maximum number of bits : 32" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+				[capacity show];
+				
+			}
         }
         // else first digit
         else {
@@ -206,13 +232,19 @@ static NSString *emptyString = @"";
     if (self.onFirstNumber) {
         self.onFirstNumber = NO;
 		[UIView animateWithDuration:0.3 animations:^{
-			self.selectedNumberBorder.frame = CGRectMake(self.selectedNumberBorder.frame.origin.x, self.selectedNumberBorder.frame.origin.y+40, self.selectedNumberBorder.frame.size.width, self.selectedNumberBorder.frame.size.height);
+			if (self.iPhone4)
+				self.selectedNumberBorder.frame = CGRectMake(self.selectedNumberBorder.frame.origin.x, self.selectedNumberBorder.frame.origin.y+29,self.selectedNumberBorder.frame.size.width, self.selectedNumberBorder.frame.size.height);
+			else
+				self.selectedNumberBorder.frame = CGRectMake(self.selectedNumberBorder.frame.origin.x, self.selectedNumberBorder.frame.origin.y+40, self.selectedNumberBorder.frame.size.width, self.selectedNumberBorder.frame.size.height);
 		}];
 	}
     else {
         self.onFirstNumber = YES;
 		[UIView animateWithDuration:0.3 animations:^{
-			self.selectedNumberBorder.frame = CGRectMake(self.selectedNumberBorder.frame.origin.x, self.selectedNumberBorder.frame.origin.y-40, self.selectedNumberBorder.frame.size.width, self.selectedNumberBorder.frame.size.height);
+			if (self.iPhone4)
+				self.selectedNumberBorder.frame = CGRectMake(self.selectedNumberBorder.frame.origin.x, self.selectedNumberBorder.frame.origin.y-29, self.selectedNumberBorder.frame.size.width, self.selectedNumberBorder.frame.size.height);
+			else
+				self.selectedNumberBorder.frame = CGRectMake(self.selectedNumberBorder.frame.origin.x, self.selectedNumberBorder.frame.origin.y-40, self.selectedNumberBorder.frame.size.width, self.selectedNumberBorder.frame.size.height);
 		}];
 	}
 }
@@ -225,7 +257,12 @@ static NSString *emptyString = @"";
     self.secondBinaryLabel.text = enterSecondBinNum;
     self.totalLabel.text = emptyString;
 	
-	CGRect borderOrigin = CGRectMake(30, 20, 284, 36);
+	CGRect borderOrigin;
+	
+	if (self.iPhone4)
+		borderOrigin = CGRectMake(30, 18, 284, 26);
+	else
+		borderOrigin = CGRectMake(30, 20, 284, 36);
 	self.selectedNumberBorder.frame = borderOrigin;
 }
 
@@ -259,7 +296,11 @@ static NSString *emptyString = @"";
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	NSString *string = pasteboard.string;
 	NSLog(@"%@",string);
-	NSString *fixedString = [FromBinaryConversion binaryDigits:string];
+	NSString *fixedString;
+	if (string)
+		fixedString = [FromBinaryConversion binaryDigits:string];
+	else
+		fixedString = @"";
 	
 	if ([fixedString length] > 32 || [fixedString isEqualToString:@""]) {
 		UIAlertView *invalid = [[UIAlertView alloc] initWithTitle:@"Invalid" message:@"Pasted number is not a valid binary number or is larger than 32 bits." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
@@ -287,5 +328,11 @@ static NSString *emptyString = @"";
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.totalLabel.text;
 	NSLog(@"Copied %@",pasteboard.string);
+	
+	[UIView animateWithDuration:0.3 animations:^{
+		self.totalLabel.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		self.totalLabel.alpha = 1.0;
+	}];
 }
 @end

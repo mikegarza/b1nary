@@ -66,28 +66,28 @@
     UITabBarItem *tabBarHelp = [tabBar.items objectAtIndex:4];
     
     tabBarBinary.title = nil;
-    tabBarBinary.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
+    //tabBarBinary.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
     tabBarBinary.image = [[UIImage imageNamed:@"binaryTab.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     tabBarBinary.selectedImage = [[UIImage imageNamed:@"binaryTabSelected.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
     //tabBarHome.title = @"Info";
     
     tabBarDecimal.title = nil;
-    tabBarDecimal.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
+    //tabBarDecimal.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
     tabBarDecimal.image = [[UIImage imageNamed:@"decimalTab.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
     tabBarDecimal.selectedImage = [[UIImage imageNamed:@"decimalTabSelected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     tabBarHex.title = nil;
-    tabBarHex.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
+    //tabBarHex.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
     tabBarHex.image = [[UIImage imageNamed:@"hexTab.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal ];
     tabBarHex.selectedImage = [[UIImage imageNamed:@"hexTabSelected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     tabBarComp.title = nil;
-    tabBarComp.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
+    //tabBarComp.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
     tabBarComp.image = [[UIImage imageNamed:@"addTab.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     tabBarComp.selectedImage = [[UIImage imageNamed:@"addTabSelected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     tabBarHelp.title = nil;
-    tabBarHelp.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
+    //tabBarHelp.imageInsets = UIEdgeInsetsMake(4, 0, -8, 0);
     tabBarHelp.image = [[UIImage imageNamed:@"helpTab.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     tabBarHelp.selectedImage = [[UIImage imageNamed:@"helpTabSelected.png"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     

@@ -59,7 +59,10 @@
         count--;
     }
     NSLog(@"Bin = %@",converted);
-	while ([converted characterAtIndex:0] == '0')
+	if ([converted length] == 0) {
+		[converted appendString:@"0"];
+	}
+	while ([converted length] > 1 && [converted characterAtIndex:0] == '0')
 		[converted deleteCharactersInRange:range];
     return (NSString*)converted;
 }

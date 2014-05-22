@@ -45,21 +45,28 @@ static NSString *emptyString = @"";
 
 - (IBAction)digitPressed:(UIButton *)sender {
     NSString *digit = [sender currentTitle];
-    if (self.middleOfNumber) {
-        self.decimalLabel.text = [self.decimalLabel.text stringByAppendingString:digit];
-        self.binaryLabel.text = [FromDecimalConversion decimalToBinary:self.decimalLabel.text];
-        self.hexLabel.text = [FromDecimalConversion decimalToHex:self.decimalLabel.text];
-        [self.binaryLabel setNeedsDisplay];
-        [self.hexLabel setNeedsDisplay];
-    }
-    else {
-        self.decimalLabel.text = digit;
-        self.binaryLabel.text = [FromDecimalConversion decimalToBinary:self.decimalLabel.text];
-        self.hexLabel.text = [FromDecimalConversion decimalToHex:self.decimalLabel.text];
-        [self.binaryLabel setNeedsDisplay];
-        [self.hexLabel setNeedsDisplay];
-        self.middleOfNumber = YES;
-    } 
+	NSString *check = [self.decimalLabel.text stringByAppendingString:digit];
+	if (!([check longLongValue] > 4294967295)) {
+		if (self.middleOfNumber) {
+			self.decimalLabel.text = [self.decimalLabel.text stringByAppendingString:digit];
+			self.binaryLabel.text = [FromDecimalConversion decimalToBinary:self.decimalLabel.text];
+			self.hexLabel.text = [FromDecimalConversion decimalToHex:self.decimalLabel.text];
+			[self.binaryLabel setNeedsDisplay];
+			[self.hexLabel setNeedsDisplay];
+		}
+		else {
+			self.decimalLabel.text = digit;
+			self.binaryLabel.text = [FromDecimalConversion decimalToBinary:self.decimalLabel.text];
+			self.hexLabel.text = [FromDecimalConversion decimalToHex:self.decimalLabel.text];
+			[self.binaryLabel setNeedsDisplay];
+			[self.hexLabel setNeedsDisplay];
+			self.middleOfNumber = YES;
+		}
+	}
+	else {
+		UIAlertView *capacity = [[UIAlertView alloc] initWithTitle:@"Too Large" message:@"The converted number will be larger than the maximum decimal number: 4294967295" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+		[capacity show];
+	}
 }
 
 - (IBAction)clearPressed:(UIButton *)sender {
@@ -138,7 +145,11 @@ static NSString *emptyString = @"";
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	NSString *string = pasteboard.string;
 	NSLog(@"%@",string);
-	NSString *fixedString = [FromDecimalConversion decimalDigits:string];
+	NSString *fixedString;
+	if (string)
+		fixedString = [FromDecimalConversion decimalDigits:string];
+	else
+		fixedString = @"";
 	
 	if ([fixedString longLongValue] > 4294967295 || [fixedString isEqualToString:@""]) {
 		UIAlertView *invalid = [[UIAlertView alloc] initWithTitle:@"Invalid" message:@"Pasted number is not a valid decimal number or is too large." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
@@ -160,12 +171,22 @@ static NSString *emptyString = @"";
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.binaryLabel.text;
 	NSLog(@"Copied %@",pasteboard.string);
+	[UIView animateWithDuration:0.3 animations:^{
+		self.binaryLabel.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		self.binaryLabel.alpha = 1.0;
+	}];
 }
 
 - (void) copyHex {
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.hexLabel.text;
 	NSLog(@"Copied %@",pasteboard.string);
+	[UIView animateWithDuration:0.3 animations:^{
+		self.hexLabel.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		self.hexLabel.alpha = 1.0;
+	}];
 }
 
 @end

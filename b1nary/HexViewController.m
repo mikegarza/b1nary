@@ -57,21 +57,28 @@ static NSString *emptyString = @"";
 
 - (IBAction)digitPressed:(UIButton *)sender {
     NSString *digit = [sender currentTitle];
-    if (self.middleOfNumber) {
-        self.hexLabel.text = [self.hexLabel.text stringByAppendingString:digit];
-        self.binaryLabel.text = [FromHexConversion hexToBinary:self.hexLabel.text];
-        self.decimalLabel.text = [FromHexConversion hexToDecimal:self.hexLabel.text];
-        [self.binaryLabel setNeedsDisplay];
-        [self.decimalLabel setNeedsDisplay];
-    }
-    else {
-        self.hexLabel.text = digit;
-        self.binaryLabel.text = [FromHexConversion hexToBinary:self.hexLabel.text];
-        self.decimalLabel.text = [FromHexConversion hexToDecimal:self.hexLabel.text];
-        [self.binaryLabel setNeedsDisplay];
-        [self.decimalLabel setNeedsDisplay];
-        self.middleOfNumber = YES;
-    }
+
+	if (self.middleOfNumber) {
+		if (!([self.hexLabel.text length] >= 8)) {
+			self.hexLabel.text = [self.hexLabel.text stringByAppendingString:digit];
+			self.binaryLabel.text = [FromHexConversion hexToBinary:self.hexLabel.text];
+			self.decimalLabel.text = [FromHexConversion hexToDecimal:self.hexLabel.text];
+			[self.binaryLabel setNeedsDisplay];
+			[self.decimalLabel setNeedsDisplay];
+		}
+		else {
+			UIAlertView *capacity = [[UIAlertView alloc] initWithTitle:@"At Capacity" message:@"The number is already at the maximum number of hexadecimal digits: 8" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[capacity show];
+		}
+	}
+	else {
+		self.hexLabel.text = digit;
+		self.binaryLabel.text = [FromHexConversion hexToBinary:self.hexLabel.text];
+		self.decimalLabel.text = [FromHexConversion hexToDecimal:self.hexLabel.text];
+		[self.binaryLabel setNeedsDisplay];
+		[self.decimalLabel setNeedsDisplay];
+		self.middleOfNumber = YES;
+	}
 }
 
 - (IBAction)clearPressed:(UIButton *)sender {
@@ -151,7 +158,7 @@ static NSString *emptyString = @"";
 	NSString *string = pasteboard.string;
 	NSLog(@"%@",string);
 	NSString *fixedString = [FromHexConversion hexDigits:string];
-	if ([fixedString isEqual:[NSNull null]] || [fixedString isEqualToString:@""]) {
+	if (!fixedString) {
 		UIAlertView *invalid = [[UIAlertView alloc] initWithTitle:@"Invalid" message:@"Pasted number is not a valid hexdecimal number or is too large." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
 		[invalid show];
 	}
@@ -179,12 +186,24 @@ static NSString *emptyString = @"";
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.binaryLabel.text;
 	NSLog(@"Copied %@",pasteboard.string);
+	
+	[UIView animateWithDuration:0.3 animations:^{
+		self.binaryLabel.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		self.binaryLabel.alpha = 1.0;
+	}];
 }
 
 - (void) copyDecimal {
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.decimalLabel.text;
 	NSLog(@"Copied %@",pasteboard.string);
+	
+	[UIView animateWithDuration:0.3 animations:^{
+		self.decimalLabel.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		self.decimalLabel.alpha = 1.0;
+	}];
 }
 
 @end

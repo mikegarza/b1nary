@@ -63,14 +63,21 @@ static int currentBitSize = 8;
 - (IBAction)digitPressed:(UIButton *)sender {
 	NSString *digit = [sender currentTitle];
 	if (self.middleOfNumber) {
-		if ([BinaryMath validUnsignedNumber:[self.binaryLabel.text stringByAppendingString:digit] withWordSize:currentBitSize]) {
-			self.binaryLabel.text = [self.binaryLabel.text stringByAppendingString:digit];
-			self.signedLabel.text = [BinaryMath twosComplement:self.binaryLabel.text withWordSize:currentBitSize];
-			self.decimalLabel.text = [BinaryMath twosComplementDecimalValue:self.signedLabel.text];
+		if (!([self.binaryLabel.text length] >= 32)) {
+			if ([BinaryMath validUnsignedNumber:[self.binaryLabel.text stringByAppendingString:digit] withWordSize:currentBitSize]) {
+				self.binaryLabel.text = [self.binaryLabel.text stringByAppendingString:digit];
+				self.signedLabel.text = [BinaryMath twosComplement:self.binaryLabel.text withWordSize:currentBitSize];
+				self.decimalLabel.text = [BinaryMath twosComplementDecimalValue:self.signedLabel.text];
+			}
+			else {
+				UIAlertView *tooLarge = [[UIAlertView alloc] initWithTitle:@"Number too large!" message:@"The number entered is too large for the current word size. Please try a smaller number or a larger word size." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+				[tooLarge show];
+			}
 		}
 		else {
-			UIAlertView *tooLarge = [[UIAlertView alloc] initWithTitle:@"Number too large!" message:@"The number entered is too large for the current word size. Please try a smaller number or a larger word size." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-			[tooLarge show];
+			UIAlertView *capacity = [[UIAlertView alloc] initWithTitle:@"At Capacity" message:@"Number is already at the maximum number of bits : 32" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+			[capacity show];
+			
 		}
 	}
 	else {
@@ -122,17 +129,35 @@ static int currentBitSize = 8;
 }
 
 - (IBAction)incrementBits:(UIButton *)sender {
-	if ([self.numOfBits.text isEqualToString:@"8"]) {
-		currentBitSize += 8;
-		self.numOfBits.text = @"16";
+	if (!self.middleOfNumber) {
+		if ([self.numOfBits.text isEqualToString:@"8"]) {
+			currentBitSize += 8;
+			self.numOfBits.text = @"16";
+		}
+		else if ([self.numOfBits.text isEqualToString:@"16"]) {
+			currentBitSize += 8;
+			self.numOfBits.text = @"24";
+		}
+		else if ([self.numOfBits.text isEqualToString:@"24"]){
+			currentBitSize += 8;
+			self.numOfBits.text = @"32";
+		}
 	}
-	else if ([self.numOfBits.text isEqualToString:@"16"]) {
-		currentBitSize += 8;
-		self.numOfBits.text = @"24";
-	}
-	else if ([self.numOfBits.text isEqualToString:@"24"]){
-		currentBitSize += 8;
-		self.numOfBits.text = @"32";
+	else {
+		if ([self.numOfBits.text isEqualToString:@"8"]) {
+			currentBitSize += 8;
+			self.numOfBits.text = @"16";
+		}
+		else if ([self.numOfBits.text isEqualToString:@"16"]) {
+			currentBitSize += 8;
+			self.numOfBits.text = @"24";
+		}
+		else if ([self.numOfBits.text isEqualToString:@"24"]){
+			currentBitSize += 8;
+			self.numOfBits.text = @"32";
+		}
+		self.signedLabel.text = [BinaryMath twosComplement:self.binaryLabel.text withWordSize:currentBitSize];
+		self.decimalLabel.text = [BinaryMath twosComplementDecimalValue:self.signedLabel.text];
 	}
 }
 
@@ -158,7 +183,7 @@ static int currentBitSize = 8;
 		else
 			testBitSize = currentBitSize - 8;
 		
-		NSLog(@"Valid? = %hhd",[BinaryMath validUnsignedNumber:self.binaryLabel.text withWordSize:testBitSize]);
+		//NSLog(@"Valid? = %hhd",[BinaryMath validUnsignedNumber:self.binaryLabel.text withWordSize:testBitSize]);
 		if ([self.binaryLabel.text length] > testBitSize || ![BinaryMath validUnsignedNumber:self.binaryLabel.text withWordSize:testBitSize]) {
 			UIAlertView *tooManyDigits = [[UIAlertView alloc] initWithTitle:@"Too Many Digits" message:@"Currently entered unsigned binary number will be too large for a smaller word size. " delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
 			[tooManyDigits show];
@@ -215,7 +240,11 @@ static int currentBitSize = 8;
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	NSString *string = pasteboard.string;
 	NSLog(@"%@",string);
-	NSString *fixedString = [FromBinaryConversion binaryDigits:string];
+	NSString *fixedString;
+	if (string)
+		fixedString = [FromBinaryConversion binaryDigits:string];
+	else
+		fixedString = @"";
 	
 	if ([fixedString length] > 32 || [fixedString isEqualToString:@""]) {
 		UIAlertView *invalid = [[UIAlertView alloc] initWithTitle:@"Invalid" message:@"Pasted number is not a valid binary number or is larger than 32 bits." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
@@ -239,11 +268,23 @@ static int currentBitSize = 8;
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.signedLabel.text;
 	NSLog(@"Copied %@",pasteboard.string);
+	
+	[UIView animateWithDuration:0.3 animations:^{
+		self.signedLabel.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		self.signedLabel.alpha = 1.0;
+	}];
 }
 
 - (void) copyDecimal {
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
 	pasteboard.string = self.decimalLabel.text;
 	NSLog(@"Copied %@",pasteboard.string);
+	
+	[UIView animateWithDuration:0.3 animations:^{
+		self.decimalLabel.alpha = 0.0;
+	} completion:^(BOOL finished) {
+		self.decimalLabel.alpha = 1.0;
+	}];
 }
 @end
