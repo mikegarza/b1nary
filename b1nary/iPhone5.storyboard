@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="TF9-qj-nmp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="TF9-qj-nmp">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -230,6 +230,7 @@
                         <outlet property="binaryLabel" destination="WEv-C5-Tju" id="aR2-3b-zKp"/>
                         <outlet property="decimalLabel" destination="jUD-Oe-VMU" id="hGz-qP-NB1"/>
                         <outlet property="hexLabel" destination="ESq-MR-hIU" id="NY4-07-feh"/>
+                        <outlet property="saveButton" destination="cgZ-60-bmE" id="4VJ-EQ-CpC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e4m-4C-JpN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -525,6 +526,7 @@
                         <outlet property="binaryLabel" destination="wRX-SL-FUd" id="MHb-BO-oSj"/>
                         <outlet property="decimalLabel" destination="aZ9-cZ-TFg" id="KbV-IK-fUP"/>
                         <outlet property="hexLabel" destination="eHA-lS-WS8" id="igF-sl-QPq"/>
+                        <outlet property="saveButton" destination="Rgh-eU-qWc" id="y40-8B-yRh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uDu-No-3l6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -611,7 +613,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="2am-bU-46p"/>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="lQb-qe-BKq"/>
                                 </connections>
                             </button>
@@ -625,7 +626,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="3Dp-Lj-c5A"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="Br6-lS-w78"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bBv-IF-UYl">
@@ -638,7 +638,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="3F0-Ez-PoI"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="V3B-Ae-ke4"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IVt-8U-yMa">
@@ -651,7 +650,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="TTE-Ib-NyF"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="ZJv-Hk-Ikl"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9nz-Bd-767">
@@ -663,7 +661,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="2gP-5g-bCz"/>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="dA8-zs-vgq"/>
                                 </connections>
                             </button>
@@ -676,7 +673,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="5rX-3N-gnd"/>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="jff-XR-KyX"/>
                                 </connections>
                             </button>
@@ -690,7 +686,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="5ld-f6-com"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="kDN-EL-ttl"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NhP-9a-jYw">
@@ -703,7 +698,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="I6b-rz-CaR"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="zKB-Je-Omm"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Htg-3y-CKa">
@@ -716,7 +710,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="0Zu-lo-GVW"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="BrH-Pj-cpO"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WHp-Zk-mHq">
@@ -729,7 +722,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="CqO-WG-0Pc"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="aH2-WR-ih6"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ndi-Rs-v5e">
@@ -741,7 +733,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="RsG-WW-ZH8"/>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="of1-d6-kRX"/>
                                 </connections>
                             </button>
@@ -755,7 +746,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="ggo-IH-38X"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="khh-Bm-asC"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i53-3N-y0s">
@@ -768,7 +758,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="K13-uI-9oo"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="rFA-7I-ACi"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CFK-6l-u2Q">
@@ -781,7 +770,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="a7S-S0-rhc"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="wRY-a5-aI7"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HmD-N4-lQd">
@@ -794,7 +782,6 @@
                                 </state>
                                 <connections>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="Pet-Bu-rm3"/>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="bqM-5O-fzv"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HSD-fJ-joT">
@@ -806,7 +793,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="digitPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="GPR-XY-VpR"/>
                                     <action selector="digitPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="h0I-66-poY"/>
                                 </connections>
                             </button>
@@ -820,7 +806,6 @@
                                 </state>
                                 <connections>
                                     <action selector="deletePressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="2Nk-jn-nDX"/>
-                                    <action selector="deletePressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="3zS-15-dEn"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fps-TB-VOf">
@@ -833,7 +818,6 @@
                                 </state>
                                 <connections>
                                     <action selector="clearPressed:" destination="Pz1-3U-cfT" eventType="touchUpInside" id="EMo-uw-TXW"/>
-                                    <action selector="clearPressed:" destination="Dph-67-HrX" eventType="touchUpInside" id="FY5-df-J9g"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -844,6 +828,7 @@
                         <outlet property="binaryLabel" destination="288-0x-lFP" id="6o5-Ag-Naw"/>
                         <outlet property="decimalLabel" destination="Xig-yn-qTk" id="v5s-mf-PmG"/>
                         <outlet property="hexLabel" destination="5Po-nI-CR6" id="isv-QW-VnJ"/>
+                        <outlet property="saveButton" destination="Z17-Vr-VzY" id="Wix-id-30S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nZW-iH-wVS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1735,6 +1720,16 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ocy-uI-AAu">
+                                <rect key="frame" x="276" y="26" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="emailMe">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="emailSupport:" destination="eG5-gV-ZZZ" eventType="touchUpInside" id="ECg-tl-qgS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -1744,6 +1739,7 @@
                         <outlet property="contactMeLabel" destination="me3-sX-FZ9" id="EBY-4D-ds2"/>
                         <outlet property="deleteButton" destination="Fvk-hp-YEJ" id="8c3-YV-Frg"/>
                         <outlet property="emailConversionButton" destination="mk3-Kc-PKg" id="JS3-VP-nKr"/>
+                        <outlet property="emailMeButton" destination="Ocy-uI-AAu" id="HTQ-48-RQC"/>
                         <outlet property="faqView" destination="6j7-VE-0Fb" id="AZb-VP-foq"/>
                         <outlet property="pageControl" destination="4g0-n1-Eaw" id="7ib-JY-BaR"/>
                         <outlet property="titleLabel" destination="EeL-E5-Yqj" id="YtK-rL-ttL"/>
@@ -1761,6 +1757,7 @@
         <image name="clearButton5" width="74" height="60"/>
         <image name="deleteButton5" width="74" height="60"/>
         <image name="email" width="45" height="45"/>
+        <image name="emailMe" width="49" height="49"/>
         <image name="iPhone5Background" width="320" height="519"/>
         <image name="iPhone5Binary" width="320" height="460"/>
         <image name="pasteButton5" width="74" height="60"/>

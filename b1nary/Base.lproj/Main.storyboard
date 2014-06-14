@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="8YX-ce-x5E">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -224,6 +224,7 @@
                         <outlet property="binaryLabel" destination="kHG-mU-1CZ" id="NZa-vf-lrK"/>
                         <outlet property="decimalLabel" destination="6Re-UP-jVw" id="UXG-qf-K3b"/>
                         <outlet property="hexLabel" destination="qJS-j8-yWP" id="HK2-On-QzO"/>
+                        <outlet property="saveButton" destination="MyU-w2-krA" id="s8V-0X-AOK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qh2-T1-AhA" sceneMemberID="firstResponder"/>
@@ -488,6 +489,7 @@
                         <outlet property="binaryLabel" destination="K5X-fe-Iyc" id="f43-7R-AZs"/>
                         <outlet property="decimalLabel" destination="rH2-qP-xaj" id="0pg-rk-4fJ"/>
                         <outlet property="hexLabel" destination="0EK-Uj-P4W" id="cVA-sS-sae"/>
+                        <outlet property="saveButton" destination="fyR-7u-ysb" id="dhX-Z2-sg8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3qq-4t-Ow8" sceneMemberID="firstResponder"/>
@@ -803,6 +805,7 @@
                         <outlet property="binaryLabel" destination="1bW-FT-mt7" id="QhT-el-f2b"/>
                         <outlet property="decimalLabel" destination="rxZ-VG-Xyh" id="0kf-WC-p9D"/>
                         <outlet property="hexLabel" destination="fOb-Od-6Vo" id="hgH-kK-uxc"/>
+                        <outlet property="saveButton" destination="DlG-g9-Cqb" id="bVs-ls-Wd9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I89-jj-BXo" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1517,6 +1520,16 @@
                                     <action selector="deletePressed:" destination="0Or-cJ-I9R" eventType="touchUpInside" id="gZt-Eu-CnH"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hu8-zf-bmw">
+                                <rect key="frame" x="273" y="24" width="45" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="emailMe">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="emailSupport:" destination="0Or-cJ-I9R" eventType="touchUpInside" id="lRh-57-3Db"/>
+                                </connections>
+                            </button>
                             <view hidden="YES" contentMode="scaleToFill" id="7oT-cX-aGq">
                                 <rect key="frame" x="0.0" y="68" width="320" height="1222"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1655,6 +1668,7 @@
                         <outlet property="contactMeLabel" destination="XXP-VB-8ca" id="BYz-I1-y3z"/>
                         <outlet property="deleteButton" destination="JKy-Fp-5ro" id="dhs-Cy-0DK"/>
                         <outlet property="emailConversionButton" destination="HIt-W8-qWC" id="5mO-Gv-9Cp"/>
+                        <outlet property="emailMeButton" destination="hu8-zf-bmw" id="leo-8i-paA"/>
                         <outlet property="faqView" destination="7oT-cX-aGq" id="RV4-Gn-3aJ"/>
                         <outlet property="pageControl" destination="Yaa-Eb-02N" id="q9x-2H-PSX"/>
                         <outlet property="titleLabel" destination="a3G-T2-ij7" id="11I-32-TIg"/>
@@ -1672,6 +1686,7 @@
         <image name="clearButton" width="74" height="48"/>
         <image name="deleteButton" width="74" height="48"/>
         <image name="email" width="45" height="45"/>
+        <image name="emailMe" width="49" height="49"/>
         <image name="first" width="30" height="30"/>
         <image name="iPhone4Background" width="320" height="431"/>
         <image name="iPhone4Binary" width="320" height="372"/>

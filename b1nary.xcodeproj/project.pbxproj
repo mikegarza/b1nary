@@ -27,6 +27,9 @@
 		2715B2D91895D89700388251 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2715B2D81895D89700388251 /* HelpViewController.m */; };
 		2715B2DD189633F500388251 /* FromBinaryConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 2715B2DC189633F500388251 /* FromBinaryConversion.m */; };
 		2715B436189CDCA900388251 /* FromDecimalConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 2715B435189CDCA900388251 /* FromDecimalConversion.m */; };
+		2732065E1946B7F700F94A01 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2732065D1946B7F700F94A01 /* StoreKit.framework */; };
+		273206611946B88300F94A01 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 273206601946B88300F94A01 /* IAPHelper.m */; };
+		273206641946C00500F94A01 /* B1naryIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 273206631946C00500F94A01 /* B1naryIAPHelper.m */; };
 		277750EF18EA716B00869E8B /* iPhone5.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 277750EE18EA716B00869E8B /* iPhone5.storyboard */; };
 		27A81BF318A19CB100FD00ED /* FromHexConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A81BF218A19CB100FD00ED /* FromHexConversion.m */; };
 		27A81BF618A4D07B00FD00ED /* AdditionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A81BF518A4D07B00FD00ED /* AdditionViewController.m */; };
@@ -78,6 +81,11 @@
 		2715B2DC189633F500388251 /* FromBinaryConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FromBinaryConversion.m; sourceTree = "<group>"; };
 		2715B434189CDCA900388251 /* FromDecimalConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FromDecimalConversion.h; sourceTree = "<group>"; };
 		2715B435189CDCA900388251 /* FromDecimalConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FromDecimalConversion.m; sourceTree = "<group>"; };
+		2732065D1946B7F700F94A01 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		2732065F1946B88300F94A01 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
+		273206601946B88300F94A01 /* IAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPHelper.m; sourceTree = "<group>"; };
+		273206621946C00500F94A01 /* B1naryIAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = B1naryIAPHelper.h; sourceTree = "<group>"; };
+		273206631946C00500F94A01 /* B1naryIAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = B1naryIAPHelper.m; sourceTree = "<group>"; };
 		277750EE18EA716B00869E8B /* iPhone5.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone5.storyboard; sourceTree = "<group>"; };
 		27A81BF118A19CB100FD00ED /* FromHexConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FromHexConversion.h; sourceTree = "<group>"; };
 		27A81BF218A19CB100FD00ED /* FromHexConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FromHexConversion.m; sourceTree = "<group>"; };
@@ -97,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2732065E1946B7F700F94A01 /* StoreKit.framework in Frameworks */,
 				27BEA5E2191B686400BBB9CE /* MessageUI.framework in Frameworks */,
 				2715B29C1895D07000388251 /* CoreGraphics.framework in Frameworks */,
 				2715B29E1895D07000388251 /* UIKit.framework in Frameworks */,
@@ -139,6 +148,7 @@
 		2715B2981895D07000388251 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2732065D1946B7F700F94A01 /* StoreKit.framework */,
 				27BEA5E1191B686400BBB9CE /* MessageUI.framework */,
 				2715B2991895D07000388251 /* Foundation.framework */,
 				2715B29B1895D07000388251 /* CoreGraphics.framework */,
@@ -151,6 +161,8 @@
 		2715B29F1895D07000388251 /* b1nary */ = {
 			isa = PBXGroup;
 			children = (
+				2732065F1946B88300F94A01 /* IAPHelper.h */,
+				273206601946B88300F94A01 /* IAPHelper.m */,
 				2715B2DA1896339100388251 /* Conversions */,
 				2715B2A81895D07000388251 /* AppDelegate.h */,
 				2715B2A91895D07000388251 /* AppDelegate.m */,
@@ -174,6 +186,8 @@
 				27A81BFB18A4D0A800FD00ED /* SignedViewController.m */,
 				2715B2B41895D07000388251 /* Images.xcassets */,
 				2715B2A01895D07000388251 /* Supporting Files */,
+				273206621946C00500F94A01 /* B1naryIAPHelper.h */,
+				273206631946C00500F94A01 /* B1naryIAPHelper.m */,
 			);
 			path = b1nary;
 			sourceTree = "<group>";
@@ -326,6 +340,7 @@
 				27A81BF918A4D09E00FD00ED /* ComplementViewController.m in Sources */,
 				2715B2DD189633F500388251 /* FromBinaryConversion.m in Sources */,
 				2715B2B31895D07000388251 /* DecimalViewController.m in Sources */,
+				273206641946C00500F94A01 /* B1naryIAPHelper.m in Sources */,
 				27A81BFC18A4D0A800FD00ED /* SignedViewController.m in Sources */,
 				27C142D318AF4AF90091D3D2 /* BinaryMath.m in Sources */,
 				2715B2AA1895D07000388251 /* AppDelegate.m in Sources */,
@@ -336,6 +351,7 @@
 				2715B2D91895D89700388251 /* HelpViewController.m in Sources */,
 				27A81BF618A4D07B00FD00ED /* AdditionViewController.m in Sources */,
 				2715B2A61895D07000388251 /* main.m in Sources */,
+				273206611946B88300F94A01 /* IAPHelper.m in Sources */,
 				2715B2D31895D82800388251 /* HexViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -465,6 +481,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "b1nary/b1nary-Prefix.pch";
 				INFOPLIST_FILE = "b1nary/b1nary-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -479,6 +496,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "b1nary/b1nary-Prefix.pch";
 				INFOPLIST_FILE = "b1nary/b1nary-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

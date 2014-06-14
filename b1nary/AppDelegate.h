@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <StoreKit/StoreKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate> {
+	NSArray *_products;
+}
 
 @property (strong, nonatomic) UIWindow *window;
+- (SKProduct *)getProduct;
 
 @end

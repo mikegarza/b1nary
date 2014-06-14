@@ -14,3 +14,20 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 #endif
+
+#define proID @"edu.self.garza.b1nary.pro"
+
+#define defaultButtonColor [UIColor colorWithRed:32/255.0f green:164/255.0f blue:147/255.0f alpha:1.0f]
+
+#define kRequiresProTitle			@"Upgrade to Pro"
+#define kRequiresProText			@"Saving conversions requires the pro version of b1nary. Upgrade for only %@!"
+#define kRequiresProPurchaseButton	@"Upgrade"
+#define kRequiresProPurchaseCancel	@"Later"
+
+#define kPurchasedProTitle		@"Success"
+#define kPurchasedProText		@"Thank you for purchasing the pro version of b1nary. Your upgrade is ready to go!"
+#define kPurchasedProButton		@"Ok"
+
+#define kFailedProTitle		@"Purchase Failed"
+#define kFailedProText		@"Purchasing the pro upgrade failed with error: %@. Please try again."
+#define kFailedProButton	@"Ok"

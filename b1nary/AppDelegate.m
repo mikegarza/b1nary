@@ -7,10 +7,20 @@
 //
 
 #import "AppDelegate.h"
+#import "B1naryIAPHelper.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	[B1naryIAPHelper sharedInstance];
+	
+	_products = nil;
+    [[B1naryIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
+        if (success) {
+            _products = products;
+			NSLog(@"products = %@",_products);
+        }
+    }];
     
     CGSize iOSDeviceScreenSize = [[UIScreen mainScreen] bounds].size;
     //UIViewController *initialViewController = nil;
@@ -128,6 +138,13 @@
 
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
+}
+
+- (SKProduct *)getProduct {
+	if (_products)
+		return _products[0];
+	else
+		return [[SKProduct alloc] init];
 }
 
 @end

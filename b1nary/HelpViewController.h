@@ -16,6 +16,7 @@
 @property (nonatomic,strong) UIScrollView *helpScrollView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UIButton *emailConversionButton;
+@property (strong, nonatomic) IBOutlet UIButton *emailMeButton;
 @property (strong, nonatomic) IBOutlet UIButton *deleteButton;
 @property (strong, nonatomic) IBOutlet UIView *faqView;
 @property (strong, nonatomic) IBOutlet UILabel *contactMeLabel;
@@ -23,6 +24,7 @@
 
 - (IBAction)deletePressed:(UIButton *)sender;
 - (IBAction)emailSaved:(UIButton *)sender;
+- (IBAction)emailSupport:(UIButton *)sender;
 
 
 @end

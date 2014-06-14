@@ -7,8 +7,11 @@
 //
 
 #import "HelpViewController.h"
+#import "AppDelegate.h"
+#import "B1naryIAPHelper.h"
+#import <sys/utsname.h>
 
-@interface HelpViewController ()
+@interface HelpViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITextView *textView;
 @property (nonatomic) BOOL iPhone4;
@@ -127,7 +130,18 @@
 //	[self.helpScrollView addSubview:rightLabel];
 	
 	NSLog(@"Scrollview subviews = %@",self.mainScrollView.subviews);
-
+	self.emailMeButton.hidden = YES;
+	
+	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+	//[button setTitle:@"PURCHASE" forState:UIControlStateNormal];
+	button.frame = CGRectMake(40, 140, 240, 40);
+	[button setImage:[UIImage imageNamed:@"purchase"] forState:UIControlStateNormal];
+	[button setImage:[UIImage imageNamed:@"purchaseSelected"] forState:UIControlStateHighlighted];
+	[button addTarget:self action:@selector(purchaseUpgrade:) forControlEvents:UIControlEventTouchUpInside];
+	//button.titleLabel.textColor = [UIColor blackColor];
+	//button.backgroundColor = UIColor.clearColor;
+	button.tag = 1000;
+	[self.textView addSubview:button];
 	
 }
 
@@ -138,18 +152,106 @@
 	NSString *documentDir = [paths objectAtIndex:0];
 	NSString *documentFile = [documentDir stringByAppendingPathComponent:@"saved.txt"];
 	
-	if ([[NSFileManager defaultManager] fileExistsAtPath:documentFile]) {
-		NSLog(@"Document found");
-		NSString *savedTextFromFile = [NSString stringWithContentsOfFile:documentFile encoding:NSUTF8StringEncoding error:nil];
-		NSArray *array = [savedTextFromFile componentsSeparatedByString:@"\n"];
-		//NSLog(@"Array count = %d",[array count]);
-		//NSLog(@"Saved string = %@",savedTextFromFile);
-		self.textView.text = savedTextFromFile;
-		self.textView.frame = CGRectMake(0, 0, self.textView.frame.size.width, [array count]*18);
-		self.savedScrollView.contentSize = CGSizeMake(self.savedScrollView.frame.size.width, [array count]*18);
+	BOOL purchased = [[NSUserDefaults standardUserDefaults] boolForKey:proID];
+	if (purchased) {
+		self.emailConversionButton.alpha = 1.0;
+		self.deleteButton.alpha = 1.0;
+		[[self.textView viewWithTag:1000] removeFromSuperview];
+		
+		if ([[NSFileManager defaultManager] fileExistsAtPath:documentFile]) {
+			NSLog(@"Document found");
+			NSString *savedTextFromFile = [NSString stringWithContentsOfFile:documentFile encoding:NSUTF8StringEncoding error:nil];
+			NSArray *array = [savedTextFromFile componentsSeparatedByString:@"\n"];
+			//NSLog(@"Array count = %d",[array count]);
+			//NSLog(@"Saved string = %@",savedTextFromFile);
+			self.textView.text = savedTextFromFile;
+			self.textView.frame = CGRectMake(0, 0, self.textView.frame.size.width, [array count]*18);
+			self.savedScrollView.contentSize = CGSizeMake(self.savedScrollView.frame.size.width, [array count]*18);
+		} else
+			self.textView.text = @"\t\t Swipe left for help & FAQs\n\n\t\tNo saved conversion history.";
+	} else {
+		self.textView.text = [NSString stringWithFormat:@"\t\t Swipe left for help & FAQs\n\n\tUpgrade to pro to save conversions\n\t here and email them as a text file.\n\n\t\t   Upgrade for only %@!",[B1naryIAPHelper getLocalizedPrice]];
+//		UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//		//[button setTitle:@"PURCHASE" forState:UIControlStateNormal];
+//		button.frame = CGRectMake(40, 140, 240, 40);
+//		[button setImage:[UIImage imageNamed:@"purchase"] forState:UIControlStateNormal];
+//		[button setImage:[UIImage imageNamed:@"purchaseSelected"] forState:UIControlStateHighlighted];
+//		[button addTarget:self action:@selector(purchaseUpgrade:) forControlEvents:UIControlEventTouchUpInside];
+//		//button.titleLabel.textColor = [UIColor blackColor];
+//		button.backgroundColor = UIColor.clearColor;
+//		button.tag = 1000;
+//		[self.textView addSubview:button];
+		self.emailConversionButton.alpha = 0.3;
+		self.deleteButton.alpha = 0.3;
 	}
-	else
-		self.textView.text = @"No saved conversion history.";
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:IAPHelperProductPurchasedNotification object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productNotPurchased:) name:IAPHelperProductFailedNotification object:nil];
+	
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)productPurchased:(NSNotification *)notification {
+	NSLog(@"Purchased!");
+	[self removePurchaseCover];
+	UIAlertView *success = [[UIAlertView alloc] initWithTitle:kPurchasedProTitle
+													  message:kPurchasedProText
+													 delegate:self
+											cancelButtonTitle:kPurchasedProButton
+											otherButtonTitles:nil];
+	[success show];
+	
+	self.emailConversionButton.alpha = 1.0;
+	self.deleteButton.alpha = 1.0;
+	[[self.textView viewWithTag:1000] removeFromSuperview];
+	[self viewWillAppear:NO];
+}
+
+- (void)productNotPurchased:(NSNotification *)notifcation {
+	SKPaymentTransaction *trans = notifcation.object;
+	[self removePurchaseCover];
+	if (trans.error.code != SKErrorPaymentCancelled) {
+		UIAlertView *failed = [[UIAlertView alloc] initWithTitle:kFailedProTitle
+														 message:[NSString stringWithFormat:kFailedProText,trans.error.localizedDescription]
+														delegate:self
+											   cancelButtonTitle:kFailedProButton
+											   otherButtonTitles:nil];
+		[failed show];
+	}
+}
+
+- (void)addPurchaseCover {
+	UITabBarController *tabBar = self.tabBarController;
+	CGRect rect = tabBar.view.frame;
+	UIView *darkView = [[UIView alloc] initWithFrame:rect];
+	darkView.backgroundColor = [UIColor blackColor];
+	darkView.alpha = 0.85;
+	darkView.tag = 99;
+	
+	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(60, darkView.frame.size.height/2 -100, 200, 90)];
+	[label setFont:[UIFont fontWithName:@"Verdana-Bold" size:26]];
+	label.text = @"Purchasing...";
+	label.textColor = [UIColor whiteColor];
+	label.textAlignment = NSTextAlignmentCenter;
+	[darkView addSubview:label];
+	
+	UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	spinner.frame = CGRectMake(135, darkView.frame.size.height/2 + 10, 50, 50);
+	[darkView addSubview:spinner];
+	[spinner startAnimating];
+	
+	[tabBar.view addSubview:darkView];
+	
+	tabBar.view.userInteractionEnabled = NO;
+}
+
+- (void)removePurchaseCover {
+	UITabBarController *tabBar = self.tabBarController;
+	[[tabBar.view viewWithTag:99] removeFromSuperview];
+	tabBar.view.userInteractionEnabled = YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -161,30 +263,58 @@
     return UIStatusBarStyleLightContent;
 }
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
-{
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
 	if (action == @selector(paste:))
 		return NO;
 	return [super canPerformAction:action withSender:sender];
 }
 
 - (IBAction)deletePressed:(UIButton *)sender {
+	BOOL purchased = [[NSUserDefaults standardUserDefaults] boolForKey:proID];
+	
+	if (purchased) {
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *documentsDirectory = [paths objectAtIndex:0];
+		NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"saved.txt"];
+		NSLog(@"filePath %@", filePath);
+		
+		if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
+//			NSError *error;
+//			[[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+//			NSLog(@"Error deleting = %@", error);
+//			//[self.textView setNeedsDisplay];
+//			[self viewWillAppear:YES];
+			UIAlertView *verify = [[UIAlertView alloc] initWithTitle:@"Delete?"
+															 message:@"Are you sure you want to delete your saved conversion history?"
+															delegate:self
+												   cancelButtonTitle:@"Cancel"
+												   otherButtonTitles:@"I'm Sure", nil];
+			[verify show];
+		}
+		else {
+			UIAlertView *noFile = [[UIAlertView alloc] initWithTitle:@"Nothing To Delete" message:@"No conversion history saved. Nothing was deleted." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+			[noFile show];
+		}
+	} else {
+		UIAlertView *requiresPro = [[UIAlertView alloc] initWithTitle:kRequiresProTitle
+															  message:[NSString stringWithFormat:@"Deleting saved conversions requires the pro version of b1nary. Upgrade for only %@.",[B1naryIAPHelper getLocalizedPrice]]
+															 delegate:self
+													cancelButtonTitle:kRequiresProPurchaseCancel
+													otherButtonTitles:kRequiresProPurchaseButton, nil];
+		[requiresPro show];
+	}
+}
+
+- (void)deleteConfirmed {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"saved.txt"];
 	NSLog(@"filePath %@", filePath);
-	
-	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
-		NSError *error;
-		[[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
-		NSLog(@"Error deleting = %@", error);
-		//[self.textView setNeedsDisplay];
-		[self viewWillAppear:YES];
-	}
-	else {
-		UIAlertView *noFile = [[UIAlertView alloc] initWithTitle:@"Nothing To Delete" message:@"No conversion history saved. Nothing was deleted." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
-		[noFile show];
-	}
+	NSError *error;
+	[[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+	NSLog(@"Error deleting = %@", error);
+	//[self.textView setNeedsDisplay];
+	[self viewWillAppear:YES];
 }
 
 - (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -196,45 +326,69 @@
 		self.titleLabel.text = @"Saved Conversions";
 		self.emailConversionButton.hidden = NO;
 		self.deleteButton.hidden = NO;
+		self.emailMeButton.hidden = YES;
 	}
 	else {
 		self.titleLabel.text = @"Help";
 		self.emailConversionButton.hidden = YES;
 		self.deleteButton.hidden = YES;
+		self.emailMeButton.hidden = NO;
 	}
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+	if (scrollView == self.mainScrollView) {
+		self.emailConversionButton.hidden = YES;
+		self.deleteButton.hidden = YES;
+		self.emailMeButton.hidden = YES;
+	}
+}
 
 - (IBAction)emailSaved:(UIButton *)sender {
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentDir = [paths objectAtIndex:0];
-	NSString *documentFile = [documentDir stringByAppendingPathComponent:@"saved.txt"];
+	BOOL purchased = [[NSUserDefaults standardUserDefaults] boolForKey:proID];
 	
-	if (![[NSFileManager defaultManager] fileExistsAtPath:documentFile]) {
-		UIAlertView *noFile = [[UIAlertView alloc] initWithTitle:@"Nothing To Email" message:@"No conversion history saved." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
-		[noFile show];
-	}
-	else {
-		if ([MFMailComposeViewController canSendMail]) {
-			//NSArray *toRecipents = [NSArray arrayWithObject:@"stem@csusm.edu"];
-			
-			MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-			mc.mailComposeDelegate = self;
-			[mc setSubject:@"b1nary conversions"];
-			//[mc setMessageBody:messageBody isHTML:NO];
-			//[mc setToRecipients:toRecipents];
-			
-			NSData *data = [NSData dataWithContentsOfFile:documentFile];
-			[mc addAttachmentData:data mimeType:@"text/plain" fileName:@"b1nary"];
-			
-			// Present mail view controller on screen
-			[self presentViewController:mc animated:YES completion:NULL];
+	if (purchased) {
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *documentDir = [paths objectAtIndex:0];
+		NSString *documentFile = [documentDir stringByAppendingPathComponent:@"saved.txt"];
+		
+		if (![[NSFileManager defaultManager] fileExistsAtPath:documentFile]) {
+			UIAlertView *noFile = [[UIAlertView alloc] initWithTitle:@"Nothing To Email" message:@"No conversion history saved." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+			[noFile show];
 		}
 		else {
-			UIAlertView *connectionFailed = [[UIAlertView alloc] initWithTitle:@"E-mail Error" message:@"No functioning e-mail account found." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-			[connectionFailed show];
+			if ([MFMailComposeViewController canSendMail]) {
+				//NSArray *toRecipents = [NSArray arrayWithObject:@"stem@csusm.edu"];
+				
+				MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+				mc.mailComposeDelegate = self;
+				[mc setSubject:@"b1nary conversions"];
+				//[mc setMessageBody:messageBody isHTML:NO];
+				//[mc setToRecipients:toRecipents];
+				
+				NSData *data = [NSData dataWithContentsOfFile:documentFile];
+				[mc addAttachmentData:data mimeType:@"text/plain" fileName:@"b1nary"];
+				
+				// Present mail view controller on screen
+				[self presentViewController:mc animated:YES completion:NULL];
+			}
+			else {
+				UIAlertView *connectionFailed = [[UIAlertView alloc] initWithTitle:@"E-mail Error" message:@"No functioning e-mail account found." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+				[connectionFailed show];
+			}
 		}
+	} else {
+		UIAlertView *requiresPro = [[UIAlertView alloc] initWithTitle:kRequiresProTitle
+															  message:[NSString stringWithFormat:@"Emailing saved conversions requires the pro version of b1nary. Upgrade for only %@.",[B1naryIAPHelper getLocalizedPrice]]
+															 delegate:self
+													cancelButtonTitle:kRequiresProPurchaseCancel
+													otherButtonTitles:kRequiresProPurchaseButton, nil];
+		[requiresPro show];
 	}
+}
+
+- (IBAction)emailSupport:(UIButton *)sender {
+	[self emailMe:nil];
 }
 
 - (void) emailMe:(UIEvent *)event {
@@ -245,6 +399,19 @@
 		MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
 		mc.mailComposeDelegate = self;
 		[mc setToRecipients:toRecipents];
+		
+		struct utsname systemInfo;
+		uname(&systemInfo);
+		
+		NSString *model = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+		//NSLog(@"Phone type = %@",stuff);
+		
+		UIDevice *device = [UIDevice currentDevice];
+		//NSString *model = device.model;
+		NSString *version = device.systemVersion;
+		NSString *data = [NSString stringWithFormat:@"\n\n\nDevice model: %@\niOS Version: %@",model,version];
+		[mc setMessageBody:data isHTML:NO];
+		
 		// Present mail view controller on screen
 		[self presentViewController:mc animated:YES completion:NULL];
 	}
@@ -276,6 +443,25 @@
     // Close the Mail Interface
     [self dismissViewControllerAnimated:YES completion:NULL];
     
+}
+
+- (void)purchaseUpgrade:(UIButton *)sender {
+	[self addPurchaseCover];
+	[[B1naryIAPHelper sharedInstance] buyProduct:[(AppDelegate *)[[UIApplication sharedApplication] delegate] getProduct]];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if ([alertView.title isEqualToString:kRequiresProTitle]) {
+		if (buttonIndex == 1) {
+			// purchase code here
+			[self addPurchaseCover];
+			[[B1naryIAPHelper sharedInstance] buyProduct:[(AppDelegate *)[[UIApplication sharedApplication] delegate] getProduct]];
+		}
+	} else if ([alertView.title isEqualToString:@"Delete?"]) {
+		if (buttonIndex == 1) {
+			[self deleteConfirmed];
+		}
+	}
 }
 
 @end

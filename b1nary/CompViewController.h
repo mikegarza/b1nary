@@ -14,10 +14,12 @@
 @interface CompViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UISegmentedControl *switchViewController;
 @property (nonatomic, copy) NSArray *allViewControllers;
+@property (strong, nonatomic) IBOutlet UIView *coverIAP;
 
 // Currently selected view controller
 @property (nonatomic, strong) UIViewController *currentViewController;
 - (IBAction)indexDidChangeForSegmentedControl:(UISegmentedControl *)sender;
+- (IBAction)purchaseTapped:(UIButton *)sender;
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 

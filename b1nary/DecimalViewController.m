@@ -8,10 +8,13 @@
 
 #import "DecimalViewController.h"
 #import "FromDecimalConversion.h"
+#import "AppDelegate.h"
+#import "B1naryIAPHelper.h"
 
-@interface DecimalViewController ()
+@interface DecimalViewController () <UIAlertViewDelegate>
 
 @property (nonatomic) BOOL middleOfNumber;
+@property (strong, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
@@ -36,6 +39,84 @@ static NSString *emptyString = @"";
 	UITapGestureRecognizer *tapGestureHex = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(copyHex)];
 	tapGestureHex.numberOfTapsRequired = 1;
 	[self.hexLabel addGestureRecognizer:tapGestureHex];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	BOOL purchased = [[NSUserDefaults standardUserDefaults] boolForKey:proID];
+	if (purchased) {
+		self.saveButton.alpha = 1.0;
+	} else {
+		self.saveButton.alpha = 0.3;
+	}
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:IAPHelperProductPurchasedNotification object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productNotPurchased:) name:IAPHelperProductFailedNotification object:nil];
+	
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)productPurchased:(NSNotification *)notification {
+	NSLog(@"Purchased!");
+	[self removePurchaseCover];
+	UIAlertView *success = [[UIAlertView alloc] initWithTitle:kPurchasedProTitle
+													  message:kPurchasedProText
+													 delegate:self
+											cancelButtonTitle:kPurchasedProButton
+											otherButtonTitles:nil];
+	[success show];
+	
+	self.saveButton.alpha = 1.0;
+	
+}
+
+- (void)productNotPurchased:(NSNotification *)notifcation {
+	SKPaymentTransaction *trans = notifcation.object;
+	[self removePurchaseCover];
+	if (trans.error.code != SKErrorPaymentCancelled) {
+		UIAlertView *failed = [[UIAlertView alloc] initWithTitle:kFailedProTitle
+														 message:[NSString stringWithFormat:kFailedProText,trans.error.localizedDescription]
+														delegate:self
+											   cancelButtonTitle:kFailedProButton
+											   otherButtonTitles:nil];
+		[failed show];
+	}
+}
+
+- (void)addPurchaseCover {
+	UITabBarController *tabBar = self.tabBarController;
+	CGRect rect = tabBar.view.frame;
+	UIView *darkView = [[UIView alloc] initWithFrame:rect];
+	darkView.backgroundColor = [UIColor blackColor];
+	darkView.alpha = 0.85;
+	darkView.tag = 99;
+	
+	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(60, darkView.frame.size.height/2 -100, 200, 90)];
+	[label setFont:[UIFont fontWithName:@"Verdana-Bold" size:26]];
+	label.text = @"Purchasing...";
+	label.textColor = [UIColor whiteColor];
+	label.textAlignment = NSTextAlignmentCenter;
+	[darkView addSubview:label];
+	
+	UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	spinner.frame = CGRectMake(135, darkView.frame.size.height/2 + 10, 50, 50);
+	[darkView addSubview:spinner];
+	[spinner startAnimating];
+	
+	[tabBar.view addSubview:darkView];
+	
+	tabBar.view.userInteractionEnabled = NO;
+}
+
+- (void)removePurchaseCover {
+	UITabBarController *tabBar = self.tabBarController;
+	[[tabBar.view viewWithTag:99] removeFromSuperview];
+	tabBar.view.userInteractionEnabled = YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -116,28 +197,49 @@ static NSString *emptyString = @"";
 }
 
 - (IBAction)saveButtonPressed:(UIButton *)sender {
-	if ([self.decimalLabel.text isEqualToString:enterDecNum]) {
-		UIAlertView *nothingToSave = [[UIAlertView alloc] initWithTitle:@"Nothing To Save" message:@"No conversion to save." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-		[nothingToSave show];
-		return;
+	BOOL purchased = [[NSUserDefaults standardUserDefaults] boolForKey:proID];
+	
+	if (purchased) {
+		if ([self.decimalLabel.text isEqualToString:enterDecNum]) {
+			UIAlertView *nothingToSave = [[UIAlertView alloc] initWithTitle:@"Nothing To Save" message:@"No conversion to save." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+			[nothingToSave show];
+			return;
+			
+		}
+		NSString *savedString = [NSString stringWithFormat:@"B: %@\nD: %@\nH: %@\n\n",self.binaryLabel.text,self.decimalLabel.text,self.hexLabel.text];
 		
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *documentsDirectory = [paths objectAtIndex:0];
+		NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"saved.txt"];
+		NSLog(@"filePath %@", filePath);
+		
+		if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
+			NSError *error;
+			[savedString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+		}
+		else {
+			NSError *error;
+			NSString *textFromFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+			NSString *newString = [textFromFile stringByAppendingString:savedString];
+			[newString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+		}
+	} else {
+		UIAlertView *requiresPro = [[UIAlertView alloc] initWithTitle:kRequiresProTitle
+															  message:[NSString stringWithFormat:kRequiresProText,[B1naryIAPHelper getLocalizedPrice]]
+															 delegate:self
+													cancelButtonTitle:kRequiresProPurchaseCancel
+													otherButtonTitles:kRequiresProPurchaseButton, nil];
+		[requiresPro show];
 	}
-	NSString *savedString = [NSString stringWithFormat:@"B: %@\nD: %@\nH: %@\n\n",self.binaryLabel.text,self.decimalLabel.text,self.hexLabel.text];
-	
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"saved.txt"];
-	NSLog(@"filePath %@", filePath);
-	
-	if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) { // if file is not exist, create it.
-		NSError *error;
-		[savedString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-	}
-	else {
-		NSError *error;
-		NSString *textFromFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-		NSString *newString = [textFromFile stringByAppendingString:savedString];
-		[newString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if ([alertView.title isEqualToString:kRequiresProTitle]) {
+		if (buttonIndex == 1) {
+			// purchase code here
+			[self addPurchaseCover];
+			[[B1naryIAPHelper sharedInstance] buyProduct:[(AppDelegate *)[[UIApplication sharedApplication] delegate] getProduct]];
+		}
 	}
 }
 
